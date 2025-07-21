@@ -128,18 +128,6 @@ def contact():
 	return jsonify({'status': 'success', 'message': 'Thank you for your message!'})
 
 
-@app.errorhandler(404)
-def not_found(error):
-	"""Handle 404 errors"""
-	return render_template('404.html'), 404
-
-
-@app.errorhandler(500)
-def internal_error(error):
-	"""Handle 500 errors"""
-	return render_template('500.html'), 500
-
-
 if __name__ == '__main__':
 	# Create templates directory if it doesn't exist
 	if not os.path.exists('templates'):
