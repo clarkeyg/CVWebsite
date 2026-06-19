@@ -1,0 +1,192 @@
+/* ============================================================================
+   OptiFuelUK — marketing site styles
+   Calm, Apple-like. SF Pro type, systemBlue interactive tint, brand green→teal
+   reserved for marketing accents, the price-decile scale as the data motif.
+   ============================================================================ */
+
+/* ---- Fonts -------------------------------------------------------------- */
+/* Per the design system, SF Pro is reproduced via the native system font
+   stack — it renders as San Francisco on Apple platforms (the app's target)
+   and the platform UI font elsewhere. SF Pro is NOT self-hosted: Apple's
+   licence does not permit redistributing it as a webfont. See --font-* below. */
+
+:root {
+  /* tints */
+  /* Interactive tint: Apple's web blue (#0071E3) instead of iOS #007AFF, so
+     white-on-blue buttons and blue links clear WCAG AA (4.5:1) on the web. */
+  --sys-blue:#0071E3; --sys-green:#34C759; --sys-red:#FF3B30; --sys-orange:#FF9500;
+  /* brand */
+  --brand-green:#4FA85B; --brand-green-light:#6FB85E; --brand-teal:#3E9B86; --brand-green-deep:#1F6B3A;
+  --brand-gradient:linear-gradient(135deg,#6FB85E 0%,#3E9B86 100%);
+  /* text */
+  /* --label-secondary darkened from iOS rgba(60,60,67,.60) (~3.4:1) to #6E6E73
+     (~5:1 on white) so secondary body copy passes WCAG AA. */
+  --label:#000; --label-secondary:#6E6E73; --label-tertiary:rgba(60,60,67,.30);
+  /* surfaces */
+  --bg:#fff; --bg-secondary:#F2F2F7; --surface:#fff;
+  --separator:rgba(60,60,67,.18); --hairline:rgba(60,60,67,.10);
+  --gray:#8E8E93; --gray-5:#E5E5EA; --gray-6:#F2F2F7;
+  /* decile */
+  --decile-0:#23E522; --decile-1:#4EE522; --decile-2:#79E522; --decile-3:#A5E522; --decile-4:#D0E522;
+  --decile-5:#E5D022; --decile-6:#E5A422; --decile-7:#E57922; --decile-8:#E54E22; --decile-9:#E52222;
+  /* type */
+  --font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --font-text:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --font-rounded:ui-rounded,"SF Pro Rounded",-apple-system,system-ui,sans-serif;
+  /* layout */
+  --maxw:1080px; --radius:18px; --radius-sm:12px;
+  --shadow-soft:0 1px 2px rgba(0,0,0,.04),0 12px 36px rgba(0,0,0,.08);
+  --shadow-phone:0 2px 8px rgba(0,0,0,.12),0 40px 80px -20px rgba(0,0,0,.32);
+}
+
+* { box-sizing:border-box; }
+html { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; scroll-behavior:smooth; }
+body {
+  margin:0; font-family:var(--font-text); color:var(--label); background:var(--bg);
+  font-size:17px; line-height:1.5; letter-spacing:-.01em;
+}
+h1,h2,h3 { font-family:var(--font-display); letter-spacing:-.025em; line-height:1.05; margin:0; }
+p { margin:0; }
+a { color:inherit; text-decoration:none; }
+img { display:block; max-width:100%; }
+.tabular { font-variant-numeric:tabular-nums; }
+
+.wrap { max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+
+/* ---- Nav ---------------------------------------------------------------- */
+.nav {
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:.5px solid var(--separator);
+}
+.nav-inner { max-width:var(--maxw); margin:0 auto; padding:0 24px; height:56px; display:flex; align-items:center; gap:28px; }
+.nav-brand { display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:18px; letter-spacing:-.02em; }
+.nav-brand img { width:28px; height:28px; border-radius:7px; }
+.nav-links { display:flex; align-items:center; gap:26px; margin-left:auto; }
+.nav-links a { font-size:15px; font-weight:500; color:var(--label-secondary); transition:color .15s; }
+.nav-links a:hover, .nav-links a.active { color:var(--label); }
+.nav-cta { margin-left:4px; }
+.nav-burger { display:none; padding:6px; background:none; border:none; color:var(--label); cursor:pointer; border-radius:8px; line-height:0; }
+.nav-burger:hover { background:var(--gray-6); }
+
+/* ---- Buttons ------------------------------------------------------------ */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--font-text); font-weight:600; font-size:17px; letter-spacing:-.01em;
+  padding:14px 26px; border-radius:14px; border:none; cursor:pointer;
+  background:var(--sys-blue); color:#fff; transition:filter .15s, transform .1s;
+}
+.btn:hover { filter:brightness(1.06); }
+.btn:active { transform:scale(.985); }
+.btn-ghost { background:var(--gray-6); color:var(--label); }
+.btn-sm { padding:9px 16px; font-size:15px; border-radius:11px; }
+
+/* Official App Store badge */
+.appstore { display:inline-block; line-height:0; border-radius:9px; transition:transform .12s, filter .15s; }
+.appstore:hover { filter:brightness(1.12); }
+.appstore:active { transform:scale(.98); }
+.appstore svg { height:56px; width:auto; display:block; }
+
+/* ---- Section primitives ------------------------------------------------- */
+section { padding:96px 0; }
+.section-grey { background:var(--bg-secondary); }
+.eyebrow { font-size:14px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--brand-green-deep); }
+.section-head { max-width:720px; margin:0 auto 56px; text-align:center; }
+.section-head h2 { font-size:clamp(30px,4.4vw,46px); font-weight:800; margin:14px 0 0; }
+.section-head p { margin:18px 0 0; font-size:19px; color:var(--label-secondary); text-wrap:pretty; }
+
+/* ---- Phone mockup ------------------------------------------------------- */
+.phone {
+  width:300px; flex:none; border-radius:46px; background:#fff; padding:11px;
+  box-shadow:var(--shadow-phone); position:relative;
+}
+.phone-screen {
+  position:relative; border-radius:36px; overflow:hidden; background:#F2F2F7;
+  height:620px; display:flex; flex-direction:column;
+}
+.phone-notch { position:absolute; top:15px; left:50%; transform:translateX(-50%); width:92px; height:25px; background:#000; border-radius:14px; z-index:20; }
+.status-bar { height:54px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; font-family:var(--font-text); font-size:14px; font-weight:600; }
+.status-bar > span:first-child { padding-left:6px; }
+.status-bar .sb-icons { display:flex; gap:5px; align-items:center; }
+
+/* in-app nav bar */
+.app-nav { padding:2px 16px 8px; }
+.app-nav h1 { font-family:var(--font-display); font-size:30px; font-weight:700; letter-spacing:-.03em; }
+.app-navbar { padding:8px 12px; display:flex; align-items:center; background:rgba(255,255,255,.8); backdrop-filter:blur(20px); border-bottom:.5px solid var(--separator); }
+.app-navbar .back { color:var(--sys-blue); font-size:15px; display:flex; align-items:center; gap:1px; }
+.app-navbar .title { flex:1; text-align:center; font-weight:600; font-size:16px; margin-left:-44px; }
+
+/* result rows */
+.app-scroll { flex:1; overflow:hidden; background:#fff; }
+.res-row { display:flex; gap:11px; padding:11px 15px; align-items:flex-start; border-bottom:.5px solid var(--separator); }
+.res-row.sel { background:color-mix(in srgb, var(--sys-orange) 12%, transparent); }
+.dot { width:12px; height:12px; border-radius:50%; margin-top:3px; flex:none; box-shadow:0 0 0 2px #fff,0 1px 3px rgba(0,0,0,.3); }
+.dot.sel { width:14px; height:14px; box-shadow:0 0 0 3px var(--sys-orange),0 1px 3px rgba(0,0,0,.3); }
+.res-name { font-family:var(--font-text); font-size:15px; font-weight:500; }
+.res-brand { font-size:11px; color:var(--label-secondary); letter-spacing:.02em; }
+.res-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; font-size:11px; color:var(--label-secondary); }
+.res-right { text-align:right; flex:none; }
+.res-total { font-family:var(--font-text); font-size:17px; font-weight:600; font-variant-numeric:tabular-nums; }
+.badge { font-size:11px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.badge.save { color:var(--sys-green); }
+.badge.more { color:var(--sys-red); }
+.badge.base { color:var(--label-secondary); font-weight:400; }
+
+/* map */
+.app-map { position:relative; height:200px; flex:none; overflow:hidden;
+  background:#ECEAE3 url("assets/map-tile.png") center/cover no-repeat; }
+.map-pin { position:absolute; width:15px; height:15px; border-radius:50%; transform:translate(-50%,-50%); box-shadow:0 0 0 2px #fff,0 1px 3px rgba(0,0,0,.35); }
+
+/* journeys stat card */
+.stat-card { margin:6px 16px 14px; padding:22px 16px; border-radius:16px; text-align:center;
+  background:rgba(255,255,255,.72); backdrop-filter:blur(20px); box-shadow:inset 0 0 0 .5px var(--separator),var(--shadow-soft); }
+.stat-card .lab { font-size:12px; font-weight:500; letter-spacing:.05em; text-transform:uppercase; color:var(--label-secondary); }
+.stat-card .amt { font-family:var(--font-rounded); font-size:46px; font-weight:700; color:var(--sys-green); font-variant-numeric:tabular-nums; margin:5px 0 2px; }
+.stat-card .cap { font-size:12px; color:var(--label-secondary); }
+.jrow { padding:11px 16px; border-bottom:.5px solid var(--separator); background:#fff; }
+.jrow .top { display:flex; justify-content:space-between; align-items:baseline; }
+.jrow .nm { font-size:15px; font-weight:500; }
+.jrow .ft { display:flex; justify-content:space-between; margin-top:3px; font-size:11px; color:var(--label-secondary); }
+
+/* tab bar */
+.tabbar { display:flex; height:54px; border-top:.5px solid var(--separator); background:rgba(255,255,255,.92); backdrop-filter:blur(20px); }
+.tabbar .tab { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:10px; color:var(--gray); }
+.tabbar .tab.on { color:var(--sys-blue); }
+.tabbar .tab svg { width:23px; height:23px; }
+
+/* ---- Decile legend chip ------------------------------------------------- */
+.decile-bar { display:inline-flex; border-radius:6px; overflow:hidden; box-shadow:inset 0 0 0 .5px var(--separator); }
+.decile-bar span { width:18px; height:14px; }
+
+/* ---- Footer ------------------------------------------------------------- */
+.footer { background:#000; color:rgba(255,255,255,.7); padding:64px 0 40px; font-size:14px; }
+.footer a { color:rgba(255,255,255,.7); transition:color .15s; }
+.footer a:hover { color:#fff; }
+.footer-grid { display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:40px; margin-bottom:48px; }
+.footer h4 { font-family:var(--font-display); color:#fff; font-size:14px; font-weight:600; margin:0 0 16px; letter-spacing:0; }
+.footer .fcol ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
+.footer .fbrand { display:flex; align-items:center; gap:11px; margin-bottom:14px; }
+.footer .fbrand img { width:34px; height:34px; border-radius:9px; }
+.footer .fbrand span { font-family:var(--font-display); color:#fff; font-weight:700; font-size:19px; }
+.footer-bottom { border-top:.5px solid rgba(255,255,255,.14); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:rgba(255,255,255,.5); }
+
+@media (max-width:860px){
+  section { padding:64px 0; }
+  .footer-grid { grid-template-columns:1fr 1fr; gap:32px; }
+  .nav-burger { display:inline-flex; align-items:center; justify-content:center; }
+  .nav-cta { margin-left:auto; }
+  .nav-links {
+    position:absolute; top:56px; left:0; right:0;
+    flex-direction:column; align-items:stretch; gap:0; margin:0; padding:6px 0;
+    background:rgba(255,255,255,.97);
+    backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:.5px solid var(--separator);
+    box-shadow:0 12px 24px -8px rgba(0,0,0,.12);
+    display:none;
+  }
+  .nav-links.open { display:flex; }
+  .nav-links a { padding:13px 24px; font-size:16px; }
+}
+@media (max-width:560px){
+  .footer-grid { grid-template-columns:1fr; }
+}
