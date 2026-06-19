@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_from_directory
 import os
 
 app = Flask(__name__)
@@ -126,6 +126,25 @@ def contact():
 	"""Handle contact form submissions (you can extend this)"""
 	# This is a placeholder - you can add email sending logic here
 	return jsonify({'status': 'success', 'message': 'Thank you for your message!'})
+
+
+# ---- OptiFuelUK marketing site -------------------------------------------
+# Static multi-page site served under /OptiFuelUK (files live in ./optifueluk).
+# The trailing-slash route makes Flask redirect /OptiFuelUK -> /OptiFuelUK/,
+# so the pages' relative links and assets resolve correctly.
+OPTIFUEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'optifueluk')
+
+
+@app.route('/OptiFuelUK/')
+def optifueluk_index():
+	"""OptiFuelUK landing page."""
+	return send_from_directory(OPTIFUEL_DIR, 'index.html')
+
+
+@app.route('/OptiFuelUK/<path:filename>')
+def optifueluk_static(filename):
+	"""Serve OptiFuelUK pages and assets (faq.html, site.css, assets/...)."""
+	return send_from_directory(OPTIFUEL_DIR, filename)
 
 
 if __name__ == '__main__':
