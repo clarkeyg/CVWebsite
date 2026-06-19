@@ -1,10 +1,18 @@
 from flask import Flask, render_template, jsonify, send_from_directory
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
+import secrets
 
 app = Flask(__name__)
 
+# Trust X-Forwarded-Proto/Host from the reverse proxy in front of the app, so
+# generated URLs and redirects use https (not http) in production.
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
 # Configuration
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+# Set SECRET_KEY in the host environment for sessions that survive restarts;
+# otherwise fall back to a random per-process key so no real secret is committed.
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 
 # Portfolio data - you can move this to a separate JSON file or database later
 PORTFOLIO_DATA = {
@@ -157,4 +165,6 @@ if __name__ == '__main__':
 		os.makedirs('static/js')
 		os.makedirs('static/images')
 
-	app.run(debug=True, host='0.0.0.0', port=5000)
+	# debug defaults OFF; opt in locally with FLASK_DEBUG=1. Never enable in prod.
+	debug = os.environ.get('FLASK_DEBUG', '').lower() in ('1', 'true', 'yes')
+	app.run(debug=debug, host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
