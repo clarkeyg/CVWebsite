@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OptiFuelUK — Fill up for less on every UK drive</title>
+<meta name="description" content="OptiFuelUK ranks UK petrol stations along your route by true total cost — the fuel plus the fuel you'd burn on the detour. Live pump prices, free on iOS." />
+<link rel="icon" href="assets/app-icon.png" />
+<link rel="stylesheet" href="site.css" />
+<style>
+  /* ---- Home-only ---- */
+  .hero { padding:84px 0 72px; background:radial-gradient(120% 90% at 80% -10%, rgba(111,184,94,.10), transparent 55%); }
+  .hero-inner { display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; }
+  .hero-icon { width:96px; height:96px; border-radius:22px; box-shadow:0 1px 2px rgba(0,0,0,.1),0 18px 40px -12px rgba(62,155,134,.45); margin-bottom:26px; }
+  .hero h1 { font-size:clamp(40px,6.4vw,68px); font-weight:800; letter-spacing:-.035em; }
+  .hero h1 .grad { background:var(--brand-gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero .sub { margin-top:22px; font-size:21px; line-height:1.45; color:var(--label-secondary); max-width:520px; text-wrap:pretty; }
+  .hero-cta { display:flex; align-items:center; gap:16px; margin-top:32px; flex-wrap:wrap; }
+  .hero .trust { margin-top:26px; display:flex; align-items:center; gap:12px; font-size:14px; color:var(--label-secondary); }
+  .hero-art { display:flex; justify-content:center; }
+
+  /* savings hook */
+  .hook-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:920px; margin:0 auto; }
+  .hook-card { background:var(--surface); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow-soft); position:relative; }
+  .hook-card .tag { font-size:13px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:var(--label-secondary); }
+  .hook-card.win { box-shadow:inset 0 0 0 2px var(--sys-green),var(--shadow-soft); }
+  .hook-card.win .tag { color:var(--sys-green); }
+  .hook-row { display:flex; justify-content:space-between; align-items:baseline; padding:11px 0; border-bottom:.5px solid var(--separator); font-size:15px; }
+  .hook-row:last-of-type { border-bottom:none; }
+  .hook-row .v { font-variant-numeric:tabular-nums; font-weight:600; }
+  .hook-station { display:flex; align-items:center; gap:10px; margin:6px 0 14px; }
+  .hook-station .dot { width:13px; height:13px; border-radius:50%; box-shadow:0 0 0 2px #fff,0 1px 3px rgba(0,0,0,.25); }
+  .hook-station .nm { font-family:var(--font-display); font-weight:700; font-size:19px; }
+  .hook-total { display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding-top:14px; border-top:1px solid var(--separator); }
+  .hook-total .big { font-family:var(--font-display); font-size:30px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .hook-versus { text-align:center; margin:30px auto 0; max-width:640px; font-size:17px; color:var(--label-secondary); text-wrap:pretty; }
+  .hook-versus b { color:var(--label); font-weight:600; }
+
+  /* signature screen split */
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; max-width:1000px; margin:0 auto; }
+  .split .feat-list { list-style:none; margin:28px 0 0; padding:0; display:flex; flex-direction:column; gap:22px; }
+  .split .feat-list li { display:flex; gap:15px; }
+  .split .feat-list .ic { width:38px; height:38px; flex:none; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(0,122,255,.10); color:var(--sys-blue); }
+  .split .feat-list .ic svg { width:21px; height:21px; }
+  .split .feat-list h4 { font-family:var(--font-display); font-size:18px; font-weight:600; margin:0 0 3px; }
+  .split .feat-list p { font-size:15px; color:var(--label-secondary); line-height:1.45; }
+
+  /* how it works */
+  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; max-width:960px; margin:0 auto; }
+  .step { text-align:center; }
+  .step .n { width:46px; height:46px; margin:0 auto 18px; border-radius:50%; background:var(--brand-gradient); color:#fff; font-family:var(--font-display); font-weight:700; font-size:20px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px -6px rgba(62,155,134,.5); }
+  .step h3 { font-size:21px; font-weight:600; margin-bottom:8px; }
+  .step p { font-size:16px; color:var(--label-secondary); text-wrap:pretty; }
+
+  /* journeys band */
+  .jband { display:grid; grid-template-columns:.95fr 1.05fr; gap:64px; align-items:center; max-width:1000px; margin:0 auto; }
+  .jband h2 { font-size:clamp(30px,4.2vw,44px); font-weight:800; }
+  .jband p { margin-top:18px; font-size:18px; color:var(--label-secondary); text-wrap:pretty; }
+  .jband .micro { margin-top:20px; font-size:14px; color:var(--label-tertiary); }
+
+  /* cta */
+  .cta { background:var(--brand-gradient); color:#fff; text-align:center; }
+  .cta h2 { font-size:clamp(32px,4.6vw,50px); font-weight:800; }
+  .cta p { margin:18px auto 0; max-width:540px; font-size:19px; opacity:.92; text-wrap:pretty; }
+  .cta .appstore { margin-top:30px; }
+
+  @media (max-width:860px){
+    .hero-inner,.split,.jband { grid-template-columns:1fr; gap:44px; }
+    .hero-art { order:-1; }
+    .jband .jband-art { order:-1; }
+    .hook-grid { grid-template-columns:1fr; }
+    .steps { grid-template-columns:1fr; gap:36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><img src="assets/app-icon.png" alt="" />OptiFuelUK</a>
+    <div class="nav-links" id="nav-menu">
+      <a href="features.html">Features</a>
+      <a href="index.html#how">How it works</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <a class="btn btn-sm nav-cta" href="https://apps.apple.com/gb/app/optifueluk/id6773123227">Download</a>
+    <button class="nav-burger" type="button" aria-label="Open menu" aria-controls="nav-menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <img class="hero-icon" src="assets/app-icon.png" alt="OptiFuelUK app icon" />
+      <h1>The cheapest fill-up isn't always the <span class="grad">cheapest price.</span></h1>
+      <p class="sub">OptiFuelUK ranks petrol stations along your route by total cost — the fuel plus the fuel you'd burn on the detour itself. So you save at the pump, not just on paper.</p>
+      <div class="hero-cta">
+        <a class="appstore" href="https://apps.apple.com/gb/app/optifueluk/id6773123227" aria-label="Download on the App Store">
+          <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store"><rect x="0.5" y="0.5" width="119" height="39" rx="6.5" fill="#000" stroke="#A6A6A6" stroke-opacity="0.7" stroke-width="1"/><svg x="11" y="9.5" width="20.5" height="20.5" viewBox="0 0 24 24"><path fill="#fff" d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.23 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.15-2.53.99-1.45 1.4-2.86 1.42-2.93-.03-.01-2.72-1.04-2.75-4.13zM14.53 4.4c.72-.87 1.2-2.08 1.07-3.29-1.03.04-2.28.69-3.02 1.56-.66.77-1.24 2-1.09 3.18 1.15.09 2.32-.58 3.04-1.45z"/></svg><text x="37" y="15.5" fill="#fff" font-family="-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="6.6" font-weight="400">Download on the</text><text x="36" y="31" fill="#fff" font-family="-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15.5" font-weight="500" letter-spacing="-0.5">App Store</text></svg>
+        </a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="trust">
+        <span class="decile-bar" aria-hidden="true">
+          <span style="background:var(--decile-0)"></span><span style="background:var(--decile-2)"></span>
+          <span style="background:var(--decile-4)"></span><span style="background:var(--decile-6)"></span>
+          <span style="background:var(--decile-8)"></span><span style="background:var(--decile-9)"></span>
+        </span>
+        Live UK pump prices, updated within 30 minutes
+      </div>
+    </div>
+    <div class="hero-art">
+      <!-- Ranked stations phone -->
+      <div class="phone" aria-hidden="true">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#000"><rect x="0" y="6" width="3" height="5" rx="1"/><rect x="4.5" y="4" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="3" stroke="#000" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.5" fill="#000"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="#000" fill-opacity=".4"/></svg></span></div>
+          <div class="app-navbar">
+            <span class="back"><svg width="11" height="18" viewBox="0 0 11 18" fill="none"><path d="M9 1 1.5 9 9 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Plan</span>
+            <span class="title">Ranked stations</span>
+          </div>
+          <!-- map -->
+          <div class="app-map">
+            <div class="map-pin" style="background:var(--decile-0); top:56%; left:20%;"></div>
+            <div class="map-pin" style="background:var(--decile-1); top:50%; left:37%;"></div>
+            <div class="map-pin" style="background:var(--decile-5); width:21px; height:21px; box-shadow:0 0 0 3px var(--sys-orange),0 1px 3px rgba(0,0,0,.35); top:48%; left:52%;"></div>
+            <div class="map-pin" style="background:var(--decile-8); top:40%; left:70%;"></div>
+            <div class="map-pin" style="background:var(--decile-9); top:71%; left:44%;"></div>
+          </div>
+          <!-- list -->
+          <div class="app-scroll">
+            <div class="res-row">
+              <span class="dot" style="background:var(--decile-0)"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="res-name">Costco Reading</div>
+                <div class="res-brand">COSTCO</div>
+                <div class="res-meta"><span>1.9 mi off · +6 min</span><span>137.7p/L</span></div>
+              </div>
+              <div class="res-right"><div class="res-total">£56.18</div><div class="badge save">£2.32 saved</div></div>
+            </div>
+            <div class="res-row">
+              <span class="dot" style="background:var(--decile-1)"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="res-name">Sainsbury's Calcot</div>
+                <div class="res-brand">SAINSBURY'S</div>
+                <div class="res-meta"><span>0.7 mi off · +2 min</span><span>139.4p/L</span></div>
+              </div>
+              <div class="res-right"><div class="res-total">£56.94</div><div class="badge save">£1.56 saved</div></div>
+            </div>
+            <div class="res-row sel">
+              <span class="dot sel" style="background:var(--decile-5)"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="res-name">Jet Newbury</div>
+                <div class="res-brand">JET</div>
+                <div class="res-meta"><span>0.1 mi off</span><span>145.9p/L</span></div>
+              </div>
+              <div class="res-right"><div class="res-total">£58.50</div><div class="badge base">baseline</div></div>
+            </div>
+            <div class="res-row">
+              <span class="dot" style="background:var(--decile-8)"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="res-name">BP M4 Membury</div>
+                <div class="res-brand">BP</div>
+                <div class="res-meta"><span>0.2 mi off · +1 min</span><span>152.9p/L</span></div>
+              </div>
+              <div class="res-right"><div class="res-total">£60.42</div><div class="badge more">£1.92 more</div></div>
+            </div>
+          </div>
+          <!-- tab bar -->
+          <div class="tabbar">
+            <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 3-6 3v15l6-3 6 3 6-3V3l-6 3-6-3Zm0 0v15m6-12v15"/></svg>Plan</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M14.5 8.5h-3.2a1.8 1.8 0 0 0 0 3.6h1.4a1.8 1.8 0 0 1 0 3.6H9.5M12 7v1.5m0 7V17"/></svg>Journeys</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11m-14 0h14m-14 0v6m14-6v6M7 17v2m10-2v2M7.5 14h.01m8.99 0h.01"/></svg>Vehicles</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 20.4 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>Settings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- SAVINGS HOOK -->
+<section class="section-grey">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The detour maths</div>
+      <h2>A station 1p cheaper, 5&nbsp;km off-route, can cost you more.</h2>
+      <p>Most apps rank by pence-per-litre. OptiFuelUK costs the whole picture — including the fuel you burn getting there and back.</p>
+    </div>
+    <div class="hook-grid">
+      <div class="hook-card">
+        <div class="tag">Cheapest on paper</div>
+        <div class="hook-station">
+          <span class="dot" style="background:var(--decile-0)"></span>
+          <span class="nm">Costco, off the A33</span>
+        </div>
+        <div class="hook-row"><span>Pump price</span><span class="v">137.7p/L</span></div>
+        <div class="hook-row"><span>40 L fill</span><span class="v">£55.08</span></div>
+        <div class="hook-row"><span>Detour</span><span class="v">3.8 mi · +9 min</span></div>
+        <div class="hook-row"><span>Detour fuel burn</span><span class="v">£2.10</span></div>
+        <div class="hook-total"><span>True total</span><span class="big">£57.18</span></div>
+      </div>
+      <div class="hook-card win">
+        <div class="tag">Cheapest once you arrive</div>
+        <div class="hook-station">
+          <span class="dot" style="background:var(--decile-2)"></span>
+          <span class="nm">Sainsbury's, on your route</span>
+        </div>
+        <div class="hook-row"><span>Pump price</span><span class="v">139.4p/L</span></div>
+        <div class="hook-row"><span>40 L fill</span><span class="v">£55.76</span></div>
+        <div class="hook-row"><span>Detour</span><span class="v">0.7 mi · +2 min</span></div>
+        <div class="hook-row"><span>Detour fuel burn</span><span class="v">£0.40</span></div>
+        <div class="hook-total"><span>True total</span><span class="big" style="color:var(--sys-green)">£56.16</span></div>
+      </div>
+    </div>
+    <p class="hook-versus">The pricier-per-litre station wins by <b>£1.02</b> — because the cheaper one's detour quietly added more than it saved. OptiFuelUK does this maths for every station along your route, automatically.</p>
+  </div>
+</section>
+
+<!-- SIGNATURE SCREEN -->
+<section>
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">Ranked stations</div>
+      <h2 style="font-size:clamp(28px,4vw,42px); font-weight:800; margin-top:14px;">Every station on your route, cheapest first.</h2>
+      <ul class="feat-list">
+        <li>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div><h4>Total cost, not just price</h4><p>Each row shows the pump price, your fill cost, the detour cost, and the £ total it all adds up to.</p></div>
+        </li>
+        <li>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/></svg></span>
+          <div><h4>Colour-coded by price decile</h4><p>Map pins and list dots share one scale — green is the cheapest 10%, red the priciest. A row links straight to its pin.</p></div>
+        </li>
+        <li>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>
+          <div><h4>Results stream in cheapest-first</h4><p>No waiting for everything to load — the best options slot into place as live prices arrive.</p></div>
+        </li>
+      </ul>
+    </div>
+    <div style="display:flex; justify-content:center;">
+      <div class="decile-explainer" style="text-align:center;">
+        <span class="decile-bar" style="border-radius:8px;">
+          <span style="width:34px; height:20px; background:var(--decile-0)"></span>
+          <span style="width:34px; height:20px; background:var(--decile-2)"></span>
+          <span style="width:34px; height:20px; background:var(--decile-4)"></span>
+          <span style="width:34px; height:20px; background:var(--decile-6)"></span>
+          <span style="width:34px; height:20px; background:var(--decile-8)"></span>
+          <span style="width:34px; height:20px; background:var(--decile-9)"></span>
+        </span>
+        <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:13px; color:var(--label-secondary); width:204px;"><span>Cheapest 10%</span><span>Priciest 10%</span></div>
+        <p style="margin-top:24px; max-width:280px; font-size:15px; color:var(--label-secondary); line-height:1.5;">The same colour scale you see on the map appears beside every result — so the cheapest fill is always the greenest dot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-grey" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How it works</div>
+      <h2>Three taps to a cheaper tank.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Plan your route</h3>
+        <p>Enter where you're starting and where you're headed. Use your current location with one tap.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>See stations ranked</h3>
+        <p>OptiFuelUK finds every station within your search corridor and ranks them by true total cost.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Navigate &amp; save</h3>
+        <p>Tap to open Apple Maps, Google Maps or Waze — and your saving is logged to Journeys.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEYS -->
+<section>
+  <div class="wrap jband">
+    <div>
+      <div class="eyebrow">Journeys</div>
+      <h2>Watch your savings add up.</h2>
+      <p>Every trip you navigate from OptiFuelUK logs its saving versus the baseline station. Your lifetime total sits at the top, like a running balance — proof the detour maths pays off.</p>
+      <p class="micro">Built on the UK Government Fuel Finder open data. Unaffiliated with the UK Government.</p>
+    </div>
+    <div class="jband-art" style="display:flex; justify-content:center;">
+      <div class="phone" aria-hidden="true">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="background:#F2F2F7;">
+          <div class="status-bar"><span>9:41</span><span class="sb-icons"><svg width="17" height="11" viewBox="0 0 17 11" fill="#000"><rect x="0" y="6" width="3" height="5" rx="1"/><rect x="4.5" y="4" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="22" height="11" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="3" stroke="#000" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="15" height="7" rx="1.5" fill="#000"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="#000" fill-opacity=".4"/></svg></span></div>
+          <div class="app-nav"><h1>Journeys</h1></div>
+          <div class="stat-card">
+            <div class="lab">Lifetime saved</div>
+            <div class="amt">£68.40</div>
+            <div class="cap">over 23 journeys</div>
+          </div>
+          <div class="app-scroll" style="background:#fff;">
+            <div class="jrow">
+              <div class="top"><span class="nm">Tesco Watford</span><span class="badge save">£2.34 saved</span></div>
+              <div class="ft"><span>London Euston → Manchester</span></div>
+              <div class="ft"><span>yesterday · via Apple Maps</span><span class="tabular">£57.43 total</span></div>
+            </div>
+            <div class="jrow">
+              <div class="top"><span class="nm">Costco Reading</span><span class="badge save">£3.10 saved</span></div>
+              <div class="ft"><span>Home → Bristol</span></div>
+              <div class="ft"><span>3 days ago · via Google Maps</span><span class="tabular">£56.18 total</span></div>
+            </div>
+            <div class="jrow">
+              <div class="top"><span class="nm">Asda Leeds</span><span class="badge save">£1.88 saved</span></div>
+              <div class="ft"><span>Leeds → York</span></div>
+              <div class="ft"><span>2 weeks ago · via Apple Maps</span><span class="tabular">£48.20 total</span></div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 3-6 3v15l6-3 6 3 6-3V3l-6 3-6-3Zm0 0v15m6-12v15"/></svg>Plan</div>
+            <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M14.5 8.5h-3.2a1.8 1.8 0 0 0 0 3.6h1.4a1.8 1.8 0 0 1 0 3.6H9.5M12 7v1.5m0 7V17"/></svg>Journeys</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11m-14 0h14m-14 0v6m14-6v6M7 17v2m10-2v2M7.5 14h.01m8.99 0h.01"/></svg>Vehicles</div>
+            <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 20.4 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>Settings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <h2>Stop overpaying at the pump.</h2>
+    <p>Free to download. Live UK prices. The smartest fill-up on every drive.</p>
+    <a class="appstore" href="https://apps.apple.com/gb/app/optifueluk/id6773123227" aria-label="Download on the App Store">
+      <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store"><rect x="0.5" y="0.5" width="119" height="39" rx="6.5" fill="#000" stroke="#A6A6A6" stroke-opacity="0.7" stroke-width="1"/><svg x="11" y="9.5" width="20.5" height="20.5" viewBox="0 0 24 24"><path fill="#fff" d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.23 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.15-2.53.99-1.45 1.4-2.86 1.42-2.93-.03-.01-2.72-1.04-2.75-4.13zM14.53 4.4c.72-.87 1.2-2.08 1.07-3.29-1.03.04-2.28.69-3.02 1.56-.66.77-1.24 2-1.09 3.18 1.15.09 2.32-.58 3.04-1.45z"/></svg><text x="37" y="15.5" fill="#fff" font-family="-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="6.6" font-weight="400">Download on the</text><text x="36" y="31" fill="#fff" font-family="-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15.5" font-weight="500" letter-spacing="-0.5">App Store</text></svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="fcol">
+        <div class="fbrand"><img src="assets/app-icon.png" alt="" /><span>OptiFuelUK</span></div>
+        <p style="max-width:320px; line-height:1.5;">Finds the cheapest place to fill up along your UK route — counting the detour, not just the price.</p>
+      </div>
+      <div class="fcol">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="index.html#how">How it works</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="https://apps.apple.com/gb/app/optifueluk/id6773123227">Download</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>About</h4>
+        <ul>
+          <li><a href="https://www.fuel-finder.service.gov.uk">Fuel Finder data</a></li>
+          <li><a href="faq.html#privacy">Privacy</a></li>
+          <li><a href="faq.html">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 OptiFuelUK. Prices from the UK Government Fuel Finder API (OGL v3.0).</span>
+      <span>Unaffiliated with the UK Government or VE3 Global Ltd.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="site.js" defer></script>
+</body>
+</html>
