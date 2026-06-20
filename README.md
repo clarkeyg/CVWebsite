@@ -89,16 +89,90 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 
 ## Deployment
 
+The site is designed to run **self-hosted behind a reverse proxy**: the app binds
+to localhost, and the proxy terminates TLS and forwards to it.
+
+```
+Internet ──▶ nginx (TLS, HTTP/2) ──proxy_pass──▶ 127.0.0.1:5000 (this app)
+```
+
 The app trusts `X-Forwarded-Proto` / `X-Forwarded-Host` from one proxy hop
-(`ProxyFix` in [`app.py`](app.py)), so run it behind nginx (or similar) with a
-production WSGI server rather than the Flask dev server:
+(`ProxyFix` in [`app.py`](app.py)), so generated URLs use HTTPS in production.
+
+### 1. Run it with a production WSGI server
+
+Use gunicorn, not the Flask/Werkzeug dev server (`python app.py`), in production:
 
 ```bash
 pip install gunicorn
-gunicorn --bind 127.0.0.1:5000 app:app
+gunicorn --workers 2 --bind 127.0.0.1:5000 app:app
 ```
 
-Set `SECRET_KEY` in the host environment and leave `FLASK_DEBUG` unset.
+### 2. Keep it running with systemd
+
+Example unit (`/etc/systemd/system/cvwebsite.service`) — dedicated unprivileged
+user, localhost bind, basic sandboxing:
+
+```ini
+[Unit]
+Description=CV Website
+After=network.target
+
+[Service]
+User=cvweb
+Group=cvweb
+WorkingDirectory=/srv/CVWebsite
+Environment=SECRET_KEY=change-me
+ExecStart=/srv/CVWebsite/.venv/bin/gunicorn --workers 2 --bind 127.0.0.1:5000 app:app
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/CVWebsite
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload && sudo systemctl enable --now cvwebsite
+```
+
+### 3. nginx reverse proxy
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name example.com;
+    ssl_certificate     /path/to/fullchain.pem;
+    ssl_certificate_key /path/to/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host  $host;
+    }
+}
+server { listen 80; server_name example.com; return 301 https://$host$request_uri; }
+```
+
+### Production checklist
+
+- [ ] Served by **gunicorn** (or similar) — never the Werkzeug dev server.
+- [ ] Runs as a **dedicated non-root user**.
+- [ ] App bound to **`127.0.0.1`** only; the proxy is the sole public entry point.
+- [ ] `SECRET_KEY` set in the environment; `FLASK_DEBUG` unset.
+- [ ] **TLS auto-renews** (e.g. certbot) so the cert can't silently expire.
+
+### Deploying an update
+
+```bash
+cd /srv/CVWebsite && git pull
+sudo systemctl restart cvwebsite      # picks up template/code changes
+```
 
 ## Notes
 
