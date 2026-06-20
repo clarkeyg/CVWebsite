@@ -13,3 +13,6 @@ env/
 Thumbs.db
 .idea/
 .vscode/
+
+# Private ops / infra notes — never commit (public repo)
+*.local.md
