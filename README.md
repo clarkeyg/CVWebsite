@@ -18,7 +18,7 @@ reverse proxy.
 | Layer    | Choice                                              |
 | -------- | --------------------------------------------------- |
 | Backend  | Python 3.12, [Flask](https://flask.palletsprojects.com/) 3 |
-| Frontend | Hand-written HTML/CSS/JS, [Font Awesome](https://fontawesome.com/) icons via CDN |
+| Frontend | Hand-written HTML/CSS/JS, [Google Fonts](https://fonts.google.com/) (Space Grotesk / Manrope / Space Mono) |
 | Proxy    | Designed to sit behind nginx (uses Werkzeug `ProxyFix`) |
 
 No build step, no frontend framework. Open the templates and edit.
@@ -86,6 +86,37 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | GET    | `/`                        | CV / portfolio page                  |
 | GET    | `/OptiFuelUK/`             | OptiFuelUK landing page              |
 | GET    | `/OptiFuelUK/<path>`       | OptiFuelUK pages & assets            |
+| GET    | `/stats`                   | Analytics dashboard (password-protected) |
+
+## Analytics
+
+The app includes **built-in, cookieless, first-party analytics** ([`analytics.py`](analytics.py)).
+Every HTML page view is recorded to a local SQLite database (`analytics.db`) via
+an `after_request` hook, and surfaced on a dashboard at **`/stats`**.
+
+**Privacy by design:** no cookies, no third parties, and **raw IPs are never
+stored**. An IP is used only transiently to look up a country and to build a
+unique-visitor hash salted with a secret that rotates daily (so it can't be
+reversed or used to track across days). Because it's cookieless and anonymous,
+no consent banner is required.
+
+**What it captures:** views & unique visitors, a 30-day trend, top pages, top
+referrers (where visitors came from), countries, browser / OS / device split,
+an hour-of-day histogram, and recent visits.
+
+**Enable the dashboard:** set `STATS_PASSWORD` (and optionally `STATS_USER`,
+default `admin`). Without it, `/stats` returns 503 but views are still recorded.
+
+```bash
+export STATS_PASSWORD="$(python -c 'import secrets; print(secrets.token_urlsafe(18))')"
+```
+
+**Country stats (optional):** download a free MaxMind
+[GeoLite2-Country](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
+`.mmdb` to the app directory (or point `GEOIP_DB` at it) and `pip install geoip2`.
+Without it, countries show as "Unknown" and everything else works normally.
+
+> The SQLite DB and the GeoIP file are gitignored — visitor data never enters the repo.
 
 ## Deployment
 
@@ -179,9 +210,9 @@ sudo systemctl restart cvwebsite      # picks up template/code changes
 - **No frontend build step.** Edit `templates/index.html` (markup),
   `static/css/style.css` (styling) and `static/javascript/cv_website_main.js`
   (behaviour) directly.
-- **Two runtime CDNs** are used: Google Fonts (Inter) and Font Awesome (icons).
-  They degrade gracefully offline; self-host them if you need the site to work
-  fully air-gapped.
+- **One runtime CDN** is used: Google Fonts (Space Grotesk, Manrope, Space Mono).
+  It degrades gracefully offline; self-host the fonts if you need the site to
+  work fully air-gapped.
 
 ## License & use
 
