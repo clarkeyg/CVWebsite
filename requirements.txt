@@ -2,3 +2,8 @@
 # Pinned for reproducible installs; bump deliberately.
 Flask==3.1.0
 Werkzeug==3.1.3
+
+# Optional: country lookups for the /stats analytics dashboard. Needs a
+# GeoLite2-Country.mmdb data file; the app runs fine without it (countries
+# just show "Unknown"). See the README "Analytics" section.
+geoip2==4.8.0
