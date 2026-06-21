@@ -13,3 +13,12 @@ env/
 Thumbs.db
 .idea/
 .vscode/
+
+# Private ops / infra notes — never commit (public repo)
+*.local.md
+
+# Analytics data & GeoIP database — never commit visitor data
+*.db
+*.db-wal
+*.db-shm
+GeoLite2-*.mmdb

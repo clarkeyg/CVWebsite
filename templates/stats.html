@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2322D3EE'/><text x='50' y='70' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23070711' text-anchor='middle'>G</text></svg>">
+<title>Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#070711;--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.1);--ink:#EAEAF5;--mut:#9A9AB8;--mut2:#6A6A86;--cyan:#22D3EE;--purple:#8B5CF6;--pink:#F472B6;--grad:linear-gradient(135deg,#22D3EE,#8B5CF6)}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding:40px 24px 80px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto}
+  a{color:inherit;text-decoration:none}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;letter-spacing:-.02em}
+  .sub{font-family:'Space Mono',monospace;font-size:12px;color:var(--mut2);margin-top:6px;letter-spacing:.03em}
+  .top{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;margin-bottom:30px}
+  .tabs{display:flex;gap:8px;font-family:'Space Mono',monospace;font-size:12px}
+  .tabs a{padding:8px 14px;border-radius:999px;border:1px solid var(--line);color:var(--mut);transition:.2s}
+  .tabs a:hover{color:var(--ink)}
+  .tabs a.on{background:var(--grad);color:var(--bg);border-color:transparent;font-weight:700}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .kpi .n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:38px;line-height:1}
+  .kpi.feat{background:var(--grad);color:var(--bg);border:none}
+  .kpi .l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.04em;margin-top:8px;color:var(--mut)}
+  .kpi.feat .l{color:rgba(7,7,17,.8)}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:14px}
+  .panel h2{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  /* horizontal bar rows */
+  .row{position:relative;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;font-size:14px;z-index:0}
+  .row+.row{border-top:1px solid rgba(255,255,255,.05)}
+  .row .bar{position:absolute;left:-8px;top:3px;bottom:3px;background:rgba(34,211,238,.10);border-radius:6px;z-index:-1}
+  .row .k{font-family:'Manrope';color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .v{font-family:'Space Mono',monospace;font-size:13px;color:var(--mut)}
+  .empty{font-family:'Space Mono',monospace;font-size:12px;color:var(--mut2);padding:8px 0}
+  /* vertical bar charts */
+  .vbars{display:flex;align-items:flex-end;gap:3px;height:120px}
+  .vbars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%}
+  .vbars .b .fill{width:100%;background:var(--grad);border-radius:3px 3px 0 0;min-height:2px;transition:.2s}
+  .vbars .b:hover .fill{filter:brightness(1.2)}
+  .vbars .b .cap{font-family:'Space Mono',monospace;font-size:9px;color:var(--mut2);white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut2);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--mut);font-family:'Space Mono',monospace;font-size:12px}
+  td.p{color:var(--ink)}
+  .foot{font-family:'Space Mono',monospace;font-size:11px;color:var(--mut2);margin-top:24px;line-height:1.7}
+  @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.vbars{height:90px} table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Analytics</h1>
+      <div class="sub">cookieless · first-party · times in UTC</div>
+    </div>
+    <div class="tabs">
+      {% for key, label in ranges.items() %}
+      <a href="?range={{ key }}" class="{{ 'on' if key == rng else '' }}">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi feat"><div class="n">{{ views }}</div><div class="l">Views ({{ ranges[rng] }})</div></div>
+    <div class="kpi"><div class="n">{{ uniques }}</div><div class="l">Unique visitors</div></div>
+    <div class="kpi"><div class="n">{{ today_views }}</div><div class="l">Views today</div></div>
+    <div class="kpi"><div class="n">{{ all_views }}</div><div class="l">Views all time</div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Views · last 30 days</h2>
+    {% if all_views %}
+    <div class="vbars">
+      {% for d in trend %}
+      <div class="b" title="{{ d.day }}: {{ d.n }}"><div class="fill" style="height:{{ d.pct }}%"></div><div class="cap">{{ d.day if loop.index0 % 5 == 0 else '' }}</div></div>
+      {% endfor %}
+    </div>
+    {% else %}<div class="empty">No data yet.</div>{% endif %}
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Top pages</h2>
+      {% for r in pages %}<div class="row"><span class="bar" style="width:{{ r.pct }}%"></span><span class="k">{{ r.label }}</span><span class="v">{{ r.n }}</span></div>{% else %}<div class="empty">No data yet.</div>{% endfor %}
+    </div>
+    <div class="panel">
+      <h2>Top referrers · where from</h2>
+      {% for r in refs %}<div class="row"><span class="bar" style="width:{{ r.pct }}%"></span><span class="k">{{ r.label }}</span><span class="v">{{ r.n }}</span></div>{% else %}<div class="empty">No data yet.</div>{% endfor %}
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="panel">
+      <h2>Countries</h2>
+      {% for r in countries %}<div class="row"><span class="bar" style="width:{{ r.pct }}%"></span><span class="k">{{ r.label }}</span><span class="v">{{ r.n }}</span></div>{% else %}<div class="empty">No data yet.</div>{% endfor %}
+      {% if not geo %}<div class="empty">Add a GeoLite2 DB to resolve countries.</div>{% endif %}
+    </div>
+    <div class="panel">
+      <h2>Browsers</h2>
+      {% for r in browsers %}<div class="row"><span class="bar" style="width:{{ r.pct }}%"></span><span class="k">{{ r.label }}</span><span class="v">{{ r.n }}</span></div>{% else %}<div class="empty">No data yet.</div>{% endfor %}
+    </div>
+    <div class="panel">
+      <h2>OS · device</h2>
+      {% for r in oses %}<div class="row"><span class="bar" style="width:{{ r.pct }}%"></span><span class="k">{{ r.label }}</span><span class="v">{{ r.n }}</span></div>{% endfor %}
+      {% for r in devices %}<div class="row"><span class="bar" style="width:{{ r.pct }}%;background:rgba(139,92,246,.12)"></span><span class="k">{{ r.label }}</span><span class="v">{{ r.n }}</span></div>{% endfor %}
+      {% if not oses and not devices %}<div class="empty">No data yet.</div>{% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>When · views by hour (UTC)</h2>
+    {% if all_views %}
+    <div class="vbars">
+      {% for h in hours %}
+      <div class="b" title="{{ '%02d:00'|format(h.h) }}: {{ h.n }}"><div class="fill" style="height:{{ h.pct }}%"></div><div class="cap">{{ '%02d'|format(h.h) if h.h % 3 == 0 else '' }}</div></div>
+      {% endfor %}
+    </div>
+    {% else %}<div class="empty">No data yet.</div>{% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>Recent visits</h2>
+    {% if recent %}
+    <table>
+      <thead><tr><th>When</th><th>Page</th><th>From</th><th>Country</th><th>Browser</th><th>OS</th><th>Device</th></tr></thead>
+      <tbody>
+        {% for r in recent %}
+        <tr><td>{{ r.when }}</td><td class="p">{{ r.path }}</td><td>{{ r.ref }}</td><td>{{ r.country }}</td><td>{{ r.browser }}</td><td>{{ r.os }}</td><td>{{ r.device }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<div class="empty">No visits recorded yet.</div>{% endif %}
+  </div>
+
+  <div class="foot">
+    Cookieless &amp; first-party. No raw IPs stored — unique visitors use a daily-rotating salted hash.<br>
+    GeoIP: {{ 'enabled' if geo else 'disabled (countries show Unknown)' }}.
+  </div>
+</div>
+</body>
+</html>
