@@ -4,6 +4,7 @@ import os
 import secrets
 
 import analytics
+import gtc
 
 app = Flask(__name__)
 
@@ -19,6 +20,10 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 # Cookieless first-party analytics: records page views and serves /stats.
 # See analytics.py. Set STATS_PASSWORD to enable the dashboard.
 analytics.init_app(app)
+
+# GTC Development marketing site at /GTC/ (static site + contact-form backend).
+# See gtc.py. Set SMTP_* to have enquiries emailed; leads are stored either way.
+gtc.init_app(app)
 
 
 @app.route('/')
