@@ -180,7 +180,12 @@ def _record(response):
         if path.startswith("/static") or path.startswith("/stats") or path == "/favicon.ico":
             return response
         ua = request.headers.get("User-Agent", "")
-        if _BOT_RE.search(ua):
+        # Count real browsers only. Health checks, uptime monitors and HTTP
+        # libraries send either no User-Agent or a non-browser one (curl,
+        # Go-http-client, okhttp, …); every real browser's UA contains "Mozilla".
+        # This filters out the kind of every-30s monitor traffic that otherwise
+        # dwarfs genuine visits. _BOT_RE still catches Mozilla-spoofing crawlers.
+        if "Mozilla" not in ua or _BOT_RE.search(ua):
             return response
 
         now = datetime.now(timezone.utc)
