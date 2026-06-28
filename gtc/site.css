@@ -26,6 +26,11 @@
 
 * { box-sizing:border-box; }
 
+/* Make the `hidden` attribute authoritative even on elements that set their own
+   display (e.g. .contact-success / .contact-form use flex, which would otherwise
+   override the UA `[hidden]{display:none}` rule). */
+[hidden] { display:none !important; }
+
 html { scroll-behavior:smooth; }
 
 body {
@@ -61,7 +66,7 @@ img { display:block; max-width:100%; }
 /* ---- Buttons ------------------------------------------------------------- */
 .btn {
   display:inline-flex; align-items:center; justify-content:center;
-  cursor:pointer; border:none; text-decoration:none;
+  cursor:pointer; border:none; background:transparent; color:inherit; text-decoration:none;
   font-family:var(--font); white-space:nowrap;
   transition:transform .15s ease, opacity .15s ease, border-color .2s ease;
 }
