@@ -1,14 +1,17 @@
 # CV Website
 
 Personal portfolio site for **George Clarke**, plus the marketing site for
-**[OptiFuelUK](https://apps.apple.com/gb/app/optifueluk/id6773123227)** served
-from the same Flask app.
+**[OptiFuelUK](https://apps.apple.com/gb/app/optifueluk/id6773123227)** and the
+**GTC Development** web-studio site, all served from the same Flask app.
 
 - **CV / portfolio**: a single-page site (hero, about, experience timeline,
   projects, contact) at `/`.
 - **OptiFuelUK**: a static multi-page marketing site at `/OptiFuelUK/` for the
   iOS app that ranks UK petrol stations along your route by *true total cost*
   (fuel + the fuel burned on the detour).
+- **GTC Development**: a single-page marketing site at `/GTC/` for George's
+  web-studio business, with a "free mockup" contact form whose enquiries are
+  stored locally and (optionally) emailed. See [Contact form](#gtc-development-contact-form).
 
 Live at <https://github.com/clarkeyg/CVWebsite> · hosted privately behind a
 reverse proxy.
@@ -27,18 +30,23 @@ No build step, no frontend framework. Open the templates and edit.
 
 ```
 .
-├── app.py                       # Flask app: routes only
+├── app.py                       # Flask app: routes + wires up the modules below
+├── analytics.py                 # Cookieless first-party analytics + /stats
+├── gtc.py                       # GTC Development site serving + contact-form backend
 ├── requirements.txt             # Pinned Python dependencies
 ├── .env.example                 # Documented environment variables
 ├── templates/
-│   └── index.html               # CV page markup (styles & scripts in static/)
+│   ├── index.html               # CV page markup (styles & scripts in static/)
+│   └── stats.html               # Analytics dashboard
 ├── static/
 │   ├── css/style.css            # Page styles
 │   └── javascript/cv_website_main.js   # Nav, scroll progress, reveals
-└── optifueluk/                  # Static OptiFuelUK marketing site
-    ├── index.html  features.html  faq.html
-    ├── site.css  site.js
-    └── assets/   (app-icon.png, map-tile.png)
+├── optifueluk/                  # Static OptiFuelUK marketing site
+│   ├── index.html  features.html  faq.html
+│   ├── site.css  site.js
+│   └── assets/   (app-icon.png, map-tile.png)
+└── gtc/                         # Static GTC Development marketing site
+    └── index.html  site.css  site.js
 ```
 
 ## Getting started
@@ -86,7 +94,25 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | GET    | `/`                        | CV / portfolio page                  |
 | GET    | `/OptiFuelUK/`             | OptiFuelUK landing page              |
 | GET    | `/OptiFuelUK/<path>`       | OptiFuelUK pages & assets            |
+| GET    | `/GTC/`                    | GTC Development landing page          |
+| GET    | `/GTC/<path>`              | GTC Development assets (site.css/js)  |
+| POST   | `/GTC/contact`             | GTC contact-form submission (JSON)    |
 | GET    | `/stats`                   | Analytics dashboard (password-protected) |
+
+## GTC Development contact form
+
+The GTC site's "free mockup" form posts to `POST /GTC/contact`. Every enquiry is
+written to a local SQLite database (`gtc.db`, gitignored) so **no lead is ever
+lost**, and is also emailed when SMTP is configured.
+
+- **Email is optional.** Set `SMTP_HOST` (and usually `SMTP_USER` /
+  `SMTP_PASSWORD`) to have enquiries emailed to `CONTACT_TO`
+  (default `clarkegeorge0509@gmail.com`). With `SMTP_HOST` unset, email is
+  disabled and leads are stored only. See [`.env.example`](.env.example).
+- **Anti-spam, no cookies or third parties:** a hidden honeypot field,
+  strict server-side validation, and a per-IP rate limit (5 / hour). As with
+  analytics, raw IPs are never stored — only a daily-salted hash used purely to
+  rate-limit.
 
 ## Analytics
 
