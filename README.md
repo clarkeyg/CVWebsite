@@ -46,7 +46,9 @@ No build step, no frontend framework. Open the templates and edit.
 │   ├── site.css  site.js
 │   └── assets/   (app-icon.png, map-tile.png)
 └── gtc/                         # Static GTC Development marketing site
-    └── index.html  site.css  site.js
+    ├── index.html  site.css  site.js
+    └── demo/cafe/               # "Maple Street" café demo (linked from Work)
+        └── index.html  site.css  site.js
 ```
 
 ## Getting started
@@ -95,7 +97,8 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | GET    | `/OptiFuelUK/`             | OptiFuelUK landing page              |
 | GET    | `/OptiFuelUK/<path>`       | OptiFuelUK pages & assets            |
 | GET    | `/GTC/`                    | GTC Development landing page          |
-| GET    | `/GTC/<path>`              | GTC Development assets (site.css/js)  |
+| GET    | `/GTC/demo/cafe/`          | "Maple Street" café demo (example build) |
+| GET    | `/GTC/<path>`              | GTC Development assets (site.css/js) & demo assets |
 | POST   | `/GTC/contact`             | GTC contact-form submission (JSON)    |
 | GET    | `/stats`                   | Analytics dashboard (password-protected) |
 
