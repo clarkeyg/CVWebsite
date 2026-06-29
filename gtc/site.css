@@ -390,6 +390,9 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
 .footer-blurb { margin:16px 0 0; color:var(--text-2); font-size:15px; line-height:1.6; max-width:320px; }
 .footer-col-label { font:700 12px/1 var(--mono); color:var(--muted); letter-spacing:.05em; margin-bottom:18px; }
 .footer-col-links { display:flex; flex-direction:column; gap:12px; font-size:15px; color:var(--text-3); }
+/* Long, unbreakable tokens like the email address must wrap rather than spill
+   off the side (which caused horizontal scroll on narrow phones). */
+.footer-col-links a, .footer-col-links button { overflow-wrap:anywhere; }
 .footer-col-links button, .footer-col-links a { background:none; border:none; padding:0; text-align:left; font:inherit; font-family:var(--font); color:var(--text-3); cursor:pointer; text-decoration:none; }
 .footer-col-links button:hover, .footer-col-links a:hover { color:var(--text); }
 .footer-bottom { max-width:var(--wrap); margin:0 auto; padding:24px 40px 40px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:14px; border-top:1px solid rgba(255,255,255,.06); }
@@ -416,7 +419,7 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
   .nav-link[aria-current="page"] { color:var(--teal); }
   .nav-cta { background:none; color:var(--teal-300); }
 
-  .grid-2, .grid-3, .work-prev, .work-grid, .price-grid, .stats, .beliefs .grid-3 { grid-template-columns:1fr; }
+  .grid-2, .grid-3, .work-prev, .work-grid, .price-grid, .stats, .beliefs .grid-3, .footer-grid { grid-template-columns:1fr; }
   .svc { grid-template-columns:1fr; gap:20px; padding:32px; }
   .svc h3 { margin-top:16px; }
   .founding, .about-head, .contact-grid { grid-template-columns:1fr; gap:32px; }
