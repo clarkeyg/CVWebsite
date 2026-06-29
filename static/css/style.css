@@ -270,7 +270,10 @@ img { display: block; max-width: 100%; }
 .work-links a { font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--cyan); display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---- Contact ------------------------------------------------------------ */
-.contact { padding: 160px 0 80px; background: var(--bg-2); overflow: hidden; }
+/* position:relative so the absolutely-positioned .contact-aurora (120vw wide)
+   is contained and clipped by overflow:hidden — without it the glow escaped
+   the section and caused horizontal scroll on mobile. */
+.contact { position: relative; padding: 160px 0 80px; background: var(--bg-2); overflow: hidden; }
 .contact-aurora { position: absolute; top: -20%; left: 50%; transform: translateX(-50%); width: 120vw; height: 90vh; z-index: 0; filter: blur(100px); opacity: .4; }
 .contact-aurora span { position: absolute; border-radius: 50%; display: block; }
 .contact-aurora .a1 { left: 10%; top: 18%; width: 40vw; height: 40vw; background: radial-gradient(circle, var(--cyan), transparent 66%); animation: nbAur1 24s ease-in-out infinite; }

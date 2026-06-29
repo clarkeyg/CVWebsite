@@ -65,7 +65,9 @@
   .cta .appstore { margin-top:30px; }
 
   @media (max-width:860px){
-    .hero-inner,.split,.jband { grid-template-columns:1fr; gap:44px; }
+    /* minmax(0,1fr) so the single column can't be inflated past the viewport
+       by a wide child (e.g. the 300px phone mock) on narrow phones. */
+    .hero-inner,.split,.jband { grid-template-columns:minmax(0,1fr); gap:44px; }
     .hero-art { order:-1; }
     .jband .jband-art { order:-1; }
     .hook-grid { grid-template-columns:1fr; }

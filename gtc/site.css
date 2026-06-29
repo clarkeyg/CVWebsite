@@ -422,7 +422,9 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
   .grid-2, .grid-3, .work-prev, .work-grid, .price-grid, .stats, .beliefs .grid-3, .footer-grid { grid-template-columns:1fr; }
   .svc { grid-template-columns:1fr; gap:20px; padding:32px; }
   .svc h3 { margin-top:16px; }
-  .founding, .about-head, .contact-grid { grid-template-columns:1fr; gap:32px; }
+  /* minmax(0,1fr) so the single column can shrink below the padded card's
+     min-content instead of overflowing on very narrow phones. */
+  .founding, .about-head, .contact-grid { grid-template-columns:minmax(0,1fr); gap:32px; }
   .founding { padding:36px; }
   .about-photo { height:340px; }
   .section, .band-inner, .hero-inner, .page-head, .about-head, .contact-grid, .footer-grid { padding-left:24px; padding-right:24px; }
