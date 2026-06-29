@@ -189,4 +189,12 @@ section { padding:96px 0; }
 }
 @media (max-width:560px){
   .footer-grid { grid-template-columns:1fr; }
+  /* Tighten the header on very narrow phones so the brand + Download CTA +
+     burger fit on one row instead of pushing off the right edge. */
+  .nav-inner { gap:12px; }
+  .nav-brand { min-width:0; font-size:17px; }
+  .nav-cta { padding:8px 12px; font-size:14px; }
+  /* The phone mock is a fixed 300px; cap it so it can't overflow the smallest
+     screens (e.g. 320px wide). */
+  .phone { max-width:100%; }
 }
