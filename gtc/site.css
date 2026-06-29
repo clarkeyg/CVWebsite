@@ -265,6 +265,48 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
 .work-kind { font:600 12px/1 var(--mono); color:var(--muted); }
 .work-card-body p { margin:10px 0 0; color:var(--text-2); font-size:15px; line-height:1.6; }
 
+/* Live-demo card: the whole card is a link to a real example site. */
+.work-card-link { display:block; color:inherit; text-decoration:none; }
+.work-card--live { border-color:rgba(45,212,191,.28); }
+.work-card--live:hover { border-color:rgba(45,212,191,.5); transform:translateY(-2px); }
+
+/* Styled mini-preview thumbnail standing in for the café demo. */
+.thumb-cafe {
+  position:relative; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px;
+  background:linear-gradient(155deg,#1a2230,#0f1726);
+  border-bottom:1px solid var(--line);
+}
+.thumb-cafe::after {
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(120% 80% at 50% 0%,rgba(45,212,191,.16),transparent 60%);
+  pointer-events:none;
+}
+.thumb-cafe-mark {
+  width:52px; height:52px; border-radius:14px; margin-bottom:8px;
+  background:#b5532f; color:#fbf3e7;
+  display:flex; align-items:center; justify-content:center;
+  font:700 30px/1 Georgia,serif;
+}
+.thumb-cafe-name { font:600 22px/1.1 Georgia,serif; color:#fbf3e7; letter-spacing:.01em; }
+.thumb-cafe-sub { font:700 9px/1 var(--mono); letter-spacing:.22em; color:#c9913a; }
+.thumb-badge {
+  position:absolute; top:14px; left:14px; z-index:1;
+  display:inline-flex; align-items:center; gap:6px;
+  font:700 10px/1 var(--mono); letter-spacing:.1em; color:var(--teal);
+  background:rgba(10,15,26,.7); border:1px solid rgba(45,212,191,.4);
+  padding:6px 10px; border-radius:999px;
+}
+.thumb-dot { width:7px; height:7px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 0 rgba(45,212,191,.6); animation:thumb-pulse 2s ease-out infinite; }
+@keyframes thumb-pulse { 0% { box-shadow:0 0 0 0 rgba(45,212,191,.5); } 70%,100% { box-shadow:0 0 0 7px rgba(45,212,191,0); } }
+
+/* Home work-preview: the café tile is a link to the demo. */
+.work-prev-item { display:block; color:inherit; text-decoration:none; }
+.work-prev-item:hover .work-prev-title { color:var(--teal-300); }
+.thumb-cafe--mini { gap:0; }
+.thumb-cafe--mini .thumb-cafe-mark { width:44px; height:44px; font-size:26px; }
+.thumb-cafe--mini .thumb-cafe-name { font-size:19px; }
+
 /* ---- Pricing ------------------------------------------------------------- */
 .price-grid { max-width:var(--wrap); margin:0 auto; padding:0 40px 40px; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start; }
 .price-card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:38px; }
@@ -400,4 +442,5 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
   html { scroll-behavior:auto; }
   .btn, .card, .work-card, .svc { transition:none; }
   .btn:hover, .card:hover, .work-card:hover { transform:none; }
+  .thumb-dot { animation:none; }
 }

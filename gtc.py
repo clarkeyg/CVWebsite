@@ -154,8 +154,18 @@ def _index():
 
 
 def _static(filename):
-    """Serve GTC pages and assets (site.css, site.js, assets/...)."""
+    """Serve GTC pages and assets (site.css, site.js, assets/...).
+
+    Also serves the demo sites under gtc/demo/ (e.g. demo/cafe/site.css), since
+    the path converter matches the nested path. The bare demo directory URL
+    (no trailing index) is handled by its own route below.
+    """
     return send_from_directory(GTC_DIR, filename)
+
+
+def _cafe_demo():
+    """Maple Street café — an example site linked from the GTC "Work" section."""
+    return send_from_directory(os.path.join(GTC_DIR, "demo", "cafe"), "index.html")
 
 
 def _contact():
@@ -207,4 +217,8 @@ def init_app(app):
     _init_db()
     app.add_url_rule("/GTC/", "gtc_index", _index)
     app.add_url_rule("/GTC/contact", "gtc_contact", _contact, methods=["POST"])
+    # Demo index routes (with/without trailing slash) take precedence over the
+    # catch-all below; the demo's own assets fall through to _static.
+    app.add_url_rule("/GTC/demo/cafe/", "gtc_demo_cafe", _cafe_demo)
+    app.add_url_rule("/GTC/demo/cafe", "gtc_demo_cafe_noslash", _cafe_demo)
     app.add_url_rule("/GTC/<path:filename>", "gtc_static", _static)
