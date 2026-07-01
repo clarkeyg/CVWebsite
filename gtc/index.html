@@ -57,7 +57,20 @@
                     <button class="btn btn-grad" data-nav="contact">Get a free mockup</button>
                     <button class="btn btn-ghost" data-nav="work">See our work →</button>
                 </div>
-                <div class="hero-shot ph">[ hero screenshot — a website you built, 1180×760 ]</div>
+                <figure class="hero-shot" data-showcase>
+                    <div class="browser">
+                        <div class="browser-bar">
+                            <span class="browser-dots"><i></i><i></i><i></i></span>
+                            <span class="browser-addr">optifueluk.co.uk</span>
+                            <span class="thumb-badge browser-live"><span class="thumb-dot"></span>LIVE</span>
+                        </div>
+                        <div class="browser-screen">
+                            <iframe data-showcase-frame src="/OptiFuelUK/" title="OptiFuelUK — a marketing site built by GTC Development" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+                            <a class="browser-open" href="/OptiFuelUK/" target="_blank" rel="noopener" aria-label="Open the OptiFuelUK site (built by GTC Development) in a new tab"></a>
+                        </div>
+                    </div>
+                    <figcaption class="hero-shot-cap"><strong>OptiFuelUK</strong> — a live marketing site for an iOS app, designed &amp; built end to end. <span class="grad-text">Open it live ↗</span></figcaption>
+                </figure>
             </div>
         </div>
 
@@ -107,9 +120,9 @@
                 <button class="link-arrow" data-nav="work">View all →</button>
             </div>
             <div class="work-prev">
+                <a class="work-prev-item" href="https://windrush-club.vercel.app" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-site thumb-windrush thumb-site--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-site-mark">W</span><span class="thumb-site-name">The Windrush Club</span></div><div class="work-prev-title">The Windrush Club</div><div class="work-prev-sub">Live site · Witney members' club</div></a>
+                <a class="work-prev-item" href="https://bubbal-beauty-parlour.vercel.app" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-site thumb-bubbal thumb-site--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-site-mark">B</span><span class="thumb-site-name">Bubbal Beauty Parlour</span></div><div class="work-prev-title">Bubbal Beauty Parlour</div><div class="work-prev-sub">Live site · Witney beauty salon</div></a>
                 <a class="work-prev-item" href="/GTC/demo/cafe/" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-cafe thumb-cafe--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-cafe-mark">M</span><span class="thumb-cafe-name">Maple Street</span></div><div class="work-prev-title">Maple Street café</div><div class="work-prev-sub">Live demo · order-ahead café site</div></a>
-                <div><div class="work-prev-thumb ph">[ booking flow concept ]</div><div class="work-prev-title">Salon booking demo</div><div class="work-prev-sub">End-to-end booking flow</div></div>
-                <div><div class="work-prev-thumb ph">[ personal portfolio site ]</div><div class="work-prev-title">My portfolio</div><div class="work-prev-sub">Designed &amp; coded from scratch</div></div>
             </div>
         </div>
 
@@ -188,11 +201,11 @@
         <div class="page-head">
             <div class="eyebrow">PROJECTS &amp; CONCEPTS</div>
             <h1>A look at what I can build.</h1>
-            <p>A mix of personal projects and concept builds — each one shows the kind of fast, modern site I'd build for your business. Yours could be the first one with a real name on it.</p>
+            <p>Live sites for real local businesses, plus concept builds — each one shows the kind of fast, modern site I'd build for your business. Yours could be next.</p>
             <div class="filters">
                 <button class="filter is-active" data-filter="all">ALL</button>
+                <button class="filter" data-filter="live">LIVE SITES</button>
                 <button class="filter" data-filter="concept">CONCEPTS</button>
-                <button class="filter" data-filter="personal">PERSONAL</button>
                 <button class="filter" data-filter="demo">DEMOS</button>
             </div>
         </div>
@@ -211,9 +224,34 @@
                     </div>
                 </a>
             </article>
-            <article class="work-card" data-kind="demo"><div class="work-card-thumb ph">[ salon booking concept ]</div><div class="work-card-body"><div class="work-card-head"><h3>Salon booking demo</h3><span class="work-kind">DEMO</span></div><p>A salon site with an online booking flow wired to a calendar, designed and built end to end.</p></div></article>
-            <article class="work-card" data-kind="personal"><div class="work-card-thumb ph">[ personal portfolio site ]</div><div class="work-card-body"><div class="work-card-head"><h3>My portfolio</h3><span class="work-kind">PERSONAL</span></div><p>My own website, designed and coded from scratch — the project that started GTC Development.</p></div></article>
-            <article class="work-card" data-kind="demo"><div class="work-card-thumb ph">[ storefront build ]</div><div class="work-card-body"><div class="work-card-head"><h3>Storefront demo</h3><span class="work-kind">DEMO</span></div><p>A small e-commerce build with local pickup and a clean, easy-to-browse product catalogue.</p></div></article>
+            <article class="work-card work-card--live" data-kind="live">
+                <a class="work-card-link" href="https://windrush-club.vercel.app" target="_blank" rel="noopener" aria-label="Open The Windrush Club website in a new tab">
+                    <div class="work-card-thumb thumb-site thumb-windrush">
+                        <span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span>
+                        <span class="thumb-site-mark">W</span>
+                        <span class="thumb-site-name">The Windrush Club</span>
+                        <span class="thumb-site-sub">MEMBERS' CLUB · WITNEY</span>
+                    </div>
+                    <div class="work-card-body">
+                        <div class="work-card-head"><h3>The Windrush Club</h3><span class="work-kind">LIVE SITE</span></div>
+                        <p>A members' social club in Witney — live entertainment, games and events, with online membership sign-up built in. Visit the live site →</p>
+                    </div>
+                </a>
+            </article>
+            <article class="work-card work-card--live" data-kind="live">
+                <a class="work-card-link" href="https://bubbal-beauty-parlour.vercel.app" target="_blank" rel="noopener" aria-label="Open the Bubbal Beauty Parlour website in a new tab">
+                    <div class="work-card-thumb thumb-site thumb-bubbal">
+                        <span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span>
+                        <span class="thumb-site-mark">B</span>
+                        <span class="thumb-site-name">Bubbal Beauty Parlour</span>
+                        <span class="thumb-site-sub">BEAUTY PARLOUR · WITNEY</span>
+                    </div>
+                    <div class="work-card-body">
+                        <div class="work-card-head"><h3>Bubbal Beauty Parlour</h3><span class="work-kind">LIVE SITE</span></div>
+                        <p>A calm, welcoming site for a long-established Witney beauty salon — threading, waxing, nails and facials, with clear pricing throughout. Visit the live site →</p>
+                    </div>
+                </a>
+            </article>
             <article class="work-card" data-kind="concept"><div class="work-card-thumb ph">[ clinic site concept ]</div><div class="work-card-body"><div class="work-card-head"><h3>Clinic concept</h3><span class="work-kind">CONCEPT</span></div><p>A calm, reassuring concept for a local clinic, with online appointment requests and a modern feel.</p></div></article>
             <article class="work-card" data-kind="concept"><div class="work-card-thumb ph">[ one-page café site ]</div><div class="work-card-body"><div class="work-card-head"><h3>Coffee one-pager</h3><span class="work-kind">CONCEPT</span></div><p>A fast, simple one-page site with hours, location, and a loyalty signup that's easy to use.</p></div></article>
         </div>
