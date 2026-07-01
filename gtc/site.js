@@ -77,6 +77,20 @@
     window.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   }
 
+  /* ---- Hero showcase: scale the live iframe preview to fit its frame ------ */
+  (function () {
+    var frame = document.querySelector("[data-showcase-frame]");
+    if (!frame) return;
+    var screen = frame.parentElement;
+    var BASE = 1280; // the iframe's virtual (unscaled) width
+    function fit() {
+      var scale = screen.clientWidth / BASE;
+      frame.style.transform = "scale(" + scale + ")";
+    }
+    fit();
+    window.addEventListener("resize", fit);
+  })();
+
   /* ---- Work filters ------------------------------------------------------ */
   var filters = document.querySelectorAll(".filter[data-filter]");
   var workCards = document.querySelectorAll(".work-card[data-kind]");
