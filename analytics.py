@@ -10,15 +10,15 @@ Privacy by design:
     salted with a secret that rotates every day, then it is discarded. The
     daily salt makes the hash non-reversible and prevents tracking across days.
 
+The /stats dashboard is public — it shows only aggregate page-view counts, no
+personal or sensitive data.
+
 Configuration (environment variables):
-  STATS_PASSWORD  Enables and protects /stats (Basic auth). Unset => dashboard off.
-  STATS_USER      Username for /stats (default: "admin").
   ANALYTICS_DB    Path to the SQLite file (default: ./analytics.db).
   GEOIP_DB        Path to a MaxMind GeoLite2-Country.mmdb (optional, for countries).
 """
 
 import hashlib
-import hmac
 import os
 import re
 import secrets
@@ -26,7 +26,7 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
-from flask import Response, request, render_template
+from flask import request, render_template
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.environ.get("ANALYTICS_DB", os.path.join(_HERE, "analytics.db"))
@@ -234,14 +234,8 @@ def _top(c, column, since, limit=8):
 
 
 def _stats_view():
-    pw = os.environ.get("STATS_PASSWORD")
-    if not pw:
-        return Response("Analytics dashboard is disabled. Set STATS_PASSWORD to enable it.", 503)
-    user = os.environ.get("STATS_USER", "admin")
-    auth = request.authorization
-    if not auth or auth.username != user or not hmac.compare_digest(auth.password or "", pw):
-        return Response("Authentication required.", 401, {"WWW-Authenticate": 'Basic realm="stats"'})
-
+    # Dashboard is public: it exposes only aggregate page-view counts, no
+    # personal or sensitive data, so it needs no authentication.
     rng = request.args.get("range", "30d")
     if rng not in _RANGES:
         rng = "30d"
