@@ -159,6 +159,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const hero = $('[data-herocontent]');
   const aurora = $('[data-aurora]');
 
+  /* ---- Mobile nav burger -------------------------------------------- */
+  (function initBurger() {
+    const burger = $('.nav-burger');
+    const menu = $('#nav-menu');
+    if (!burger || !menu) return;
+    burger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+    });
+    $$('a', menu).forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+
   /* ---- Nav, progress bar, scroll-spy (one batched handler) --------- */
   const nav = $('.nav');
   const progress = $('.progress');
