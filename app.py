@@ -17,8 +17,8 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 # otherwise fall back to a random per-process key so no real secret is committed.
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 
-# Cookieless first-party analytics: records page views and serves /stats.
-# See analytics.py. Set STATS_PASSWORD to enable the dashboard.
+# Cookieless first-party analytics: records page views and serves a public
+# /stats dashboard (aggregate counts only). See analytics.py.
 analytics.init_app(app)
 
 # GTC Development marketing site at /GTC/ (static site + contact-form backend).

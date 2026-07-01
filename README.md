@@ -100,7 +100,7 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | GET    | `/GTC/demo/cafe/`          | "Maple Street" café demo (example build) |
 | GET    | `/GTC/<path>`              | GTC Development assets (site.css/js) & demo assets |
 | POST   | `/GTC/contact`             | GTC contact-form submission (JSON)    |
-| GET    | `/stats`                   | Analytics dashboard (password-protected) |
+| GET    | `/stats`                   | Analytics dashboard (public)         |
 
 ## GTC Development contact form
 
@@ -133,12 +133,8 @@ no consent banner is required.
 referrers (where visitors came from), countries, browser / OS / device split,
 an hour-of-day histogram, and recent visits.
 
-**Enable the dashboard:** set `STATS_PASSWORD` (and optionally `STATS_USER`,
-default `admin`). Without it, `/stats` returns 503 but views are still recorded.
-
-```bash
-export STATS_PASSWORD="$(python -c 'import secrets; print(secrets.token_urlsafe(18))')"
-```
+**The dashboard:** `/stats` is public and needs no configuration — it shows
+only aggregate page-view counts, no personal or sensitive data.
 
 **Country stats (optional):** download a free MaxMind
 [GeoLite2-Country](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
