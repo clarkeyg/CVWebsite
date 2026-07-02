@@ -493,7 +493,7 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
 
 @media (max-width:560px) {
   .hero-inner { padding-top:72px; }
-  .hero-shot { height:240px; }
+  .hero-shot { margin-top:44px; }
   .hero-cta .btn, .about-actions .btn { width:100%; }
   .trust { font-size:12px; }
   .trust-items { gap:18px; }

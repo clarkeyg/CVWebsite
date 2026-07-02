@@ -202,7 +202,10 @@
     });
     // Close after tapping a link, and when clicking away.
     navMenu.addEventListener("click", function (e) {
-      if (e.target.closest("a")) navMenu.classList.remove("is-open");
+      if (e.target.closest("a")) {
+        navMenu.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+      }
     });
     document.addEventListener("click", function (e) {
       if (navMenu.classList.contains("is-open") && !e.target.closest(".nav")) {
