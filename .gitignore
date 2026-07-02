@@ -14,6 +14,12 @@ Thumbs.db
 .idea/
 .vscode/
 
+# Local agent/browser tooling & debug screenshots taken at the repo root
+# (real image assets live in gtc/assets/ and optifueluk/assets/)
+.claude/
+.playwright-mcp/
+/*.png
+
 # Private ops / infra notes — never commit (public repo)
 *.local.md
 

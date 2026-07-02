@@ -84,11 +84,16 @@
     var screen = frame.parentElement;
     var BASE = 1280; // the iframe's virtual (unscaled) width
     function fit() {
-      var scale = screen.clientWidth / BASE;
-      frame.style.transform = "scale(" + scale + ")";
+      // While another screen is active the home screen is display:none and
+      // clientWidth is 0 — skip, or the preview gets stuck at scale(0).
+      if (!screen.clientWidth) return;
+      frame.style.transform = "scale(" + (screen.clientWidth / BASE) + ")";
     }
     fit();
     window.addEventListener("resize", fit);
+    // Re-fit when navigating back to Home (runs after the routing handler
+    // above has made the screen visible again).
+    window.addEventListener("hashchange", fit);
   })();
 
   /* ---- Work filters ------------------------------------------------------ */

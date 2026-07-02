@@ -81,7 +81,7 @@ def _ip_hash():
     """
     ip = request.remote_addr or ""
     day = datetime.now(timezone.utc).date().isoformat()
-    salt = os.environ.get("SECRET_KEY", "gtc") + day
+    salt = (current_app.config.get("SECRET_KEY") or "gtc") + day
     return hashlib.sha256((salt + "|" + ip).encode()).hexdigest()[:16]
 
 
