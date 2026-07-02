@@ -1,7 +1,7 @@
 """Lightweight, cookieless, first-party analytics for the CV site.
 
 Logs one row per HTML page view to a local SQLite database via an after_request
-hook, and serves a password-protected /stats dashboard.
+hook, and serves a public /stats dashboard.
 
 Privacy by design:
   * No cookies, no cross-site tracking, no third parties.
@@ -19,6 +19,7 @@ Configuration (environment variables):
 """
 
 import hashlib
+import ipaddress
 import os
 import re
 import secrets
@@ -157,8 +158,11 @@ def _referrer_host(host_self):
 def _country(ip):
     if not ip:
         return "Unknown"
-    if ip.startswith(("127.", "10.", "192.168.", "::1", "fc", "fd")) or ip.startswith("172.16."):
-        return "Local"
+    try:
+        if ipaddress.ip_address(ip).is_private:
+            return "Local"
+    except ValueError:
+        return "Unknown"
     if not _geo_reader:
         return "Unknown"
     try:
