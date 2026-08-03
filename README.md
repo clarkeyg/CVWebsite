@@ -2,16 +2,16 @@
 
 Personal portfolio site for **George Clarke**, plus the marketing site for
 **[OptiFuelUK](https://apps.apple.com/gb/app/optifueluk/id6773123227)** and the
-**GTC Development** web-studio site, all served from the same Flask app.
+**GTC Web Studio** business site, all served from the same Flask app.
 
 - **CV / portfolio**: a single-page site (hero, about, experience timeline,
   projects, contact) at `/`.
 - **OptiFuelUK**: a static multi-page marketing site at `/OptiFuelUK/` for the
   iOS app that ranks UK petrol stations along your route by *true total cost*
   (fuel + the fuel burned on the detour).
-- **GTC Development**: a single-page marketing site at `/GTC/` for George's
+- **GTC Web Studio**: a single-page marketing site at `/GTC/` for George's
   web-studio business, with a "free mockup" contact form whose enquiries are
-  stored locally and (optionally) emailed. See [Contact form](#gtc-development-contact-form).
+  stored locally and (optionally) emailed. See [Contact form](#gtc-web-studio-contact-form).
 
 Live at <https://github.com/clarkeyg/CVWebsite> · hosted privately behind a
 reverse proxy.
@@ -32,7 +32,8 @@ No build step, no frontend framework. Open the templates and edit.
 .
 ├── app.py                       # Flask app: routes + wires up the modules below
 ├── analytics.py                 # Cookieless first-party analytics + /stats
-├── gtc.py                       # GTC Development site serving + contact-form backend
+├── gtc.py                       # GTC Web Studio site serving + contact-form backend
+├── seo.py                       # /robots.txt + /sitemap.xml, generated per request
 ├── requirements.txt             # Pinned Python dependencies
 ├── .env.example                 # Documented environment variables
 ├── templates/
@@ -45,7 +46,7 @@ No build step, no frontend framework. Open the templates and edit.
 │   ├── index.html  features.html  faq.html
 │   ├── site.css  site.js
 │   └── assets/   (app-icon.png, map-tile.png)
-└── gtc/                         # Static GTC Development marketing site
+└── gtc/                         # Static GTC Web Studio marketing site
     ├── index.html  site.css  site.js
     └── demo/cafe/               # "Maple Street" café demo (linked from Work)
         └── index.html  site.css  site.js
@@ -88,6 +89,7 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | `SECRET_KEY`  | random per process | Flask session signing key. Set it so sessions survive restarts. |
 | `FLASK_DEBUG` | off                | `1`/`true`/`yes` enables the debug server. Never in production. |
 | `PORT`        | `5000`             | Port the app binds to.                             |
+| `SITE_BASE_URL` | derived from request | Canonical origin (e.g. `https://example.com`) used for `<link rel=canonical>`, `og:url`, JSON-LD and the sitemap. Set it to pin one canonical hostname; leave unset to follow the request host. |
 
 ## Routes
 
@@ -96,13 +98,15 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | GET    | `/`                        | CV / portfolio page                  |
 | GET    | `/OptiFuelUK/`             | OptiFuelUK landing page              |
 | GET    | `/OptiFuelUK/<path>`       | OptiFuelUK pages & assets            |
-| GET    | `/GTC/`                    | GTC Development landing page          |
+| GET    | `/GTC/`                    | GTC Web Studio landing page          |
 | GET    | `/GTC/demo/cafe/`          | "Maple Street" café demo (example build) |
-| GET    | `/GTC/<path>`              | GTC Development assets (site.css/js) & demo assets |
-| POST   | `/GTC/contact`             | GTC contact-form submission (JSON)    |
+| GET    | `/GTC/<path>`              | GTC Web Studio assets (site.css/js) & demo assets |
+| POST   | `/GTC/contact`             | GTC contact-form submission (form-encoded) |
+| GET    | `/robots.txt`              | Crawl rules + sitemap pointer        |
+| GET    | `/sitemap.xml`             | Sitemap of the public pages          |
 | GET    | `/stats`                   | Analytics dashboard (public)         |
 
-## GTC Development contact form
+## GTC Web Studio contact form
 
 The GTC site's "free mockup" form posts to `POST /GTC/contact`. Every enquiry is
 written to a local SQLite database (`gtc.db`, gitignored) so **no lead is ever

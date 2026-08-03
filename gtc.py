@@ -1,4 +1,4 @@
-"""GTC Development marketing site — static serving + contact-form backend.
+"""GTC Web Studio marketing site — static serving + contact-form backend.
 
 Serves the static site under ./gtc at /GTC/ (mirroring the OptiFuelUK section),
 and handles the "free mockup" contact form at POST /GTC/contact:
@@ -30,7 +30,9 @@ import sqlite3
 from datetime import datetime, timezone
 from email.message import EmailMessage
 
-from flask import current_app, jsonify, request, send_from_directory
+from flask import Response, current_app, jsonify, request, send_from_directory
+
+import seo
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 GTC_DIR = os.path.join(_HERE, "gtc")
@@ -116,7 +118,7 @@ def _send_email(lead):
 
     subject = "New GTC mockup request — " + (lead["business"] or lead["name"] or "website enquiry")
     body = (
-        "New enquiry from the GTC Development contact form:\n\n"
+        "New enquiry from the GTC Web Studio contact form:\n\n"
         "Name:     {name}\n"
         "Business: {business}\n"
         "Email:    {email}\n\n"
@@ -149,8 +151,20 @@ def _send_email(lead):
 # Routes
 # --------------------------------------------------------------------------- #
 def _index():
-    """GTC Development landing page."""
-    return send_from_directory(GTC_DIR, "index.html")
+    """GTC Web Studio landing page.
+
+    Served through a read-and-substitute rather than send_from_directory so the
+    canonical link, og:url and JSON-LD get absolute URLs. Those tags must carry
+    a full origin to be useful, and hardcoding one into the HTML would break the
+    moment the site moves domain — so the file ships a %SITE_BASE_URL% sentinel
+    that resolves against the host actually serving the request. See seo.py.
+    """
+    with open(os.path.join(GTC_DIR, "index.html"), encoding="utf-8") as fh:
+        html = fh.read()
+    return Response(
+        html.replace("%SITE_BASE_URL%", seo.base_url()),
+        mimetype="text/html",
+    )
 
 
 def _static(filename):
@@ -213,7 +227,7 @@ def _contact():
 
 
 def init_app(app):
-    """Wire the GTC Development site into a Flask app: DB, static routes, form."""
+    """Wire the GTC Web Studio site into a Flask app: DB, static routes, form."""
     _init_db()
     app.add_url_rule("/GTC/", "gtc_index", _index)
     app.add_url_rule("/GTC/contact", "gtc_contact", _contact, methods=["POST"])

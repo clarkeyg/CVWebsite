@@ -5,6 +5,7 @@ import secrets
 
 import analytics
 import gtc
+import seo
 
 app = Flask(__name__)
 
@@ -21,15 +22,20 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 # /stats dashboard (aggregate counts only). See analytics.py.
 analytics.init_app(app)
 
-# GTC Development marketing site at /GTC/ (static site + contact-form backend).
+# GTC Web Studio marketing site at /GTC/ (static site + contact-form backend).
 # See gtc.py. Set SMTP_* to have enquiries emailed; leads are stored either way.
 gtc.init_app(app)
+
+# /robots.txt and /sitemap.xml, generated from the request host. See seo.py.
+seo.init_app(app)
 
 
 @app.route('/')
 def index():
     """Main portfolio page. All content lives in templates/index.html."""
-    return render_template('index.html')
+    # base_url feeds the canonical/og:url tags and the Person structured data,
+    # which need an absolute origin. See seo.py.
+    return render_template('index.html', base_url=seo.base_url())
 
 
 # ---- OptiFuelUK marketing site -------------------------------------------

@@ -6,12 +6,117 @@
     <!-- Mark JS as available so only the active screen shows; degrades to a
          stacked, fully-readable page when JS is off. -->
     <script>document.documentElement.className += ' js';</script>
-    <title>GTC Development | Websites for local business</title>
-    <meta name="description" content="GTC Development builds fast, modern websites engineered to put local businesses at the top of search — and bring more customers through the door. Founder-led, custom-built by George.">
+    <title>GTC Web Studio | Web Design for Local Business in Witney, Oxfordshire</title>
+    <meta name="description" content="GTC Web Studio is a founder-led web studio in Witney, Oxfordshire, building fast, custom websites for local businesses — designed, built and looked after by George Clarke. Free mockup, no commitment.">
+
+    <!-- %SITE_BASE_URL% is substituted with the live origin at serve time by
+         gtc.py, so these stay correct if the site changes domain. -->
+    <link rel="canonical" href="%SITE_BASE_URL%/GTC/">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="GTC Development | Websites for local business">
+    <meta property="og:site_name" content="GTC Web Studio">
+    <meta property="og:url" content="%SITE_BASE_URL%/GTC/">
+    <meta property="og:title" content="GTC Web Studio | Web Design for Local Business in Witney">
     <meta property="og:description" content="Fast, modern, custom-built websites for local businesses. Free mockup, zero commitment.">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GTC Web Studio | Web Design for Local Business in Witney">
+    <meta name="twitter:description" content="Fast, modern, custom-built websites for local businesses. Free mockup, zero commitment.">
+
+    <!-- Structured data: tells search engines this page IS the entity "GTC Web
+         Studio", which is what a brand-name search needs to resolve to. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "@id": "%SITE_BASE_URL%/GTC/#business",
+      "name": "GTC Web Studio",
+      "alternateName": "GTC",
+      "url": "%SITE_BASE_URL%/GTC/",
+      "description": "Founder-led web studio building fast, custom-designed websites for local businesses, with local SEO setup and ongoing care plans.",
+      "slogan": "Websites for local business",
+      "priceRange": "££",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Witney",
+        "addressRegion": "Oxfordshire",
+        "addressCountry": "GB"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Witney" },
+        { "@type": "City", "name": "Carterton" },
+        { "@type": "AdministrativeArea", "name": "Oxfordshire" }
+      ],
+      "serviceType": [
+        "Web design",
+        "Web development",
+        "Local SEO",
+        "Website hosting and maintenance"
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "George Clarke",
+        "jobTitle": "Founder and web developer",
+        "url": "%SITE_BASE_URL%/"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Website packages",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Launch",
+            "price": "899",
+            "priceCurrency": "GBP",
+            "description": "3-page custom website, mobile-first design, contact form and map, basic SEO."
+          },
+          {
+            "@type": "Offer",
+            "name": "Grow",
+            "price": "1499",
+            "priceCurrency": "GBP",
+            "description": "Up to 7 pages, local SEO setup, Google Business profile, hosting and updates included."
+          },
+          {
+            "@type": "Offer",
+            "name": "Complete",
+            "description": "E-commerce or booking, copywriting and photography, advanced SEO strategy. Custom priced."
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- The visible FAQ block on the Pricing screen, marked up so it can win a
+         rich result. Questions/answers must stay in sync with that copy. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How long does it take to build my site?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Most sites go live within two weeks of approving the mockup. Larger projects with stores or booking take a little longer — I'll give you a clear timeline up front." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I own my website?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Completely. The site, the domain, the content — it's all yours. No lock-in, no holding your business hostage." }
+        },
+        {
+          "@type": "Question",
+          "name": "What if I need changes later?",
+          "acceptedAnswer": { "@type": "Answer", "text": "On a care plan, small changes are included — just send me a message. Bigger updates are quoted clearly before any work starts." }
+        },
+        {
+          "@type": "Question",
+          "name": "Will my site actually bring in customers?",
+          "acceptedAnswer": { "@type": "Answer", "text": "That's the whole point. Every site is built to get found on Google and turn visitors into calls, bookings, and orders — that's the difference between a website that just sits there and one that actually works for you." }
+        }
+      ]
+    }
+    </script>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%232dd4bf'/><stop offset='1' stop-color='%2338bdf8'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='70' font-size='58' font-family='Manrope,Arial,sans-serif' font-weight='800' fill='%2306121a' text-anchor='middle'>G</text></svg>">
 
@@ -25,8 +130,8 @@
     <!-- ============ NAV ============ -->
     <header class="nav">
         <div class="nav-inner">
-            <button class="brand" data-nav="home" aria-label="GTC Development home">
-                <span class="brand-mark">G</span> GTC Development
+            <button class="brand" data-nav="home" aria-label="GTC Web Studio home">
+                <span class="brand-mark">G</span> GTC Web Studio
             </button>
             <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -52,7 +157,7 @@
             <div class="hero-inner">
                 <div class="badge"><span class="dot"></span>WEBSITES FOR LOCAL BUSINESS</div>
                 <h1>Your business, <span class="grad-text">impossible to miss</span> online.</h1>
-                <p class="hero-lead">GTC Development builds fast, modern websites engineered to put local businesses at the top of the search — and bring more customers through the door.</p>
+                <p class="hero-lead">GTC Web Studio builds fast, modern websites engineered to put local businesses at the top of the search — and bring more customers through the door.</p>
                 <div class="hero-cta">
                     <button class="btn btn-grad" data-nav="contact">Get a free mockup</button>
                     <button class="btn btn-ghost" data-nav="work">See our work →</button>
@@ -65,8 +170,8 @@
                             <span class="thumb-badge browser-live"><span class="thumb-dot"></span>LIVE</span>
                         </div>
                         <div class="browser-screen">
-                            <iframe data-showcase-frame src="/OptiFuelUK/" title="OptiFuelUK — a marketing site built by GTC Development" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
-                            <a class="browser-open" href="/OptiFuelUK/" target="_blank" rel="noopener" aria-label="Open the OptiFuelUK site (built by GTC Development) in a new tab"></a>
+                            <iframe data-showcase-frame src="/OptiFuelUK/" title="OptiFuelUK — a marketing site built by GTC Web Studio" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+                            <a class="browser-open" href="/OptiFuelUK/" target="_blank" rel="noopener" aria-label="Open the OptiFuelUK site (built by GTC Web Studio) in a new tab"></a>
                         </div>
                     </div>
                     <figcaption class="hero-shot-cap"><strong>OptiFuelUK</strong> — a live marketing site for an iOS app, designed &amp; built end to end. <span class="grad-text">Open it live ↗</span></figcaption>
@@ -122,7 +227,7 @@
             <div class="work-prev">
                 <a class="work-prev-item" href="https://windrush-club.vercel.app" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-site thumb-windrush thumb-site--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-site-mark">W</span><span class="thumb-site-name">The Windrush Club</span></div><div class="work-prev-title">The Windrush Club</div><div class="work-prev-sub">Live site · Witney members' club</div></a>
                 <a class="work-prev-item" href="https://bubbal-beauty-parlour.vercel.app" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-site thumb-bubbal thumb-site--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-site-mark">B</span><span class="thumb-site-name">Bubbal Beauty Parlour</span></div><div class="work-prev-title">Bubbal Beauty Parlour</div><div class="work-prev-sub">Live site · Witney beauty salon</div></a>
-                <a class="work-prev-item" href="/GTC/demo/cafe/" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-cafe thumb-cafe--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-cafe-mark">M</span><span class="thumb-cafe-name">Maple Street</span></div><div class="work-prev-title">Maple Street café</div><div class="work-prev-sub">Live demo · order-ahead café site</div></a>
+                <a class="work-prev-item" href="https://cousinz-barber-demo.vercel.app" target="_blank" rel="noopener"><div class="work-prev-thumb thumb-site thumb-cousinz thumb-site--mini"><span class="thumb-badge"><span class="thumb-dot"></span>LIVE</span><span class="thumb-site-mark">C</span><span class="thumb-site-name">Cousinz Barber</span></div><div class="work-prev-title">Cousinz Barber</div><div class="work-prev-sub">Live demo · Turkish barbers, Witney</div></a>
             </div>
         </div>
 
@@ -154,7 +259,7 @@
     <section class="screen" data-screen="services" aria-label="Services">
         <div class="page-head">
             <div class="eyebrow">SERVICES</div>
-            <h1>Everything your business needs to win online.</h1>
+            <h2>Everything your business needs to win online.</h2>
             <p>One partner, from first sketch to launch and long after. No agencies, no runaround — just George.</p>
         </div>
         <div class="svc-list">
@@ -200,7 +305,7 @@
     <section class="screen" data-screen="work" aria-label="Work">
         <div class="page-head">
             <div class="eyebrow">SELECTED WORK</div>
-            <h1>A look at what I can build.</h1>
+            <h2>A look at what I can build.</h2>
             <p>Live sites I've built for real local businesses — each one shows the kind of fast, modern site I'd build for your business. Yours could be next.</p>
             <div class="filters">
                 <button class="filter is-active" data-filter="all">ALL</button>
@@ -210,16 +315,16 @@
         </div>
         <div class="work-grid">
             <article class="work-card work-card--live" data-kind="demo">
-                <a class="work-card-link" href="/GTC/demo/cafe/" target="_blank" rel="noopener" aria-label="Open the Maple Street café demo in a new tab">
-                    <div class="work-card-thumb thumb-cafe">
+                <a class="work-card-link" href="https://cousinz-barber-demo.vercel.app" target="_blank" rel="noopener" aria-label="Open the Cousinz Barber site in a new tab">
+                    <div class="work-card-thumb thumb-site thumb-cousinz">
                         <span class="thumb-badge"><span class="thumb-dot"></span>LIVE DEMO</span>
-                        <span class="thumb-cafe-mark">M</span>
-                        <span class="thumb-cafe-name">Maple Street</span>
-                        <span class="thumb-cafe-sub">COFFEE &amp; KITCHEN</span>
+                        <span class="thumb-site-mark">C</span>
+                        <span class="thumb-site-name">Cousinz Barber</span>
+                        <span class="thumb-site-sub">TURKISH BARBERS · WITNEY</span>
                     </div>
                     <div class="work-card-body">
-                        <div class="work-card-head"><h3>Maple Street café</h3><span class="work-kind">LIVE DEMO</span></div>
-                        <p>A full café site with a working order-ahead basket and a menu that updates itself — built end to end to show what a busy café could have. Try it live →</p>
+                        <div class="work-card-head"><h3>Cousinz Barber</h3><span class="work-kind">LIVE DEMO</span></div>
+                        <p>Traditional Turkish barbers in Witney and Carterton — skin fades, hot-towel shaves and the full ritual, with opening hours and reviews front and centre. Visit the site →</p>
                     </div>
                 </a>
             </article>
@@ -251,6 +356,20 @@
                     </div>
                 </a>
             </article>
+            <article class="work-card work-card--live" data-kind="demo">
+                <a class="work-card-link" href="/GTC/demo/cafe/" target="_blank" rel="noopener" aria-label="Open the Maple Street café demo in a new tab">
+                    <div class="work-card-thumb thumb-cafe">
+                        <span class="thumb-badge"><span class="thumb-dot"></span>LIVE DEMO</span>
+                        <span class="thumb-cafe-mark">M</span>
+                        <span class="thumb-cafe-name">Maple Street</span>
+                        <span class="thumb-cafe-sub">COFFEE &amp; KITCHEN</span>
+                    </div>
+                    <div class="work-card-body">
+                        <div class="work-card-head"><h3>Maple Street café</h3><span class="work-kind">LIVE DEMO</span></div>
+                        <p>A full café site with a working order-ahead basket and a menu that updates itself — built end to end to show what a busy café could have. Try it live →</p>
+                    </div>
+                </a>
+            </article>
         </div>
         <div class="cta">
             <div class="cta-inner">
@@ -265,7 +384,7 @@
     <section class="screen" data-screen="pricing" aria-label="Pricing">
         <div class="page-head page-head--center">
             <div class="eyebrow">PRICING</div>
-            <h1 style="max-width:720px;">Straightforward pricing, no surprises.</h1>
+            <h2 style="max-width:720px;">Straightforward pricing, no surprises.</h2>
             <p style="max-width:560px;">Pick what fits your business today. Scale up whenever you're ready.</p>
         </div>
         <div class="price-grid">
@@ -312,15 +431,15 @@
         <div class="about-head">
             <div>
                 <div class="eyebrow">ABOUT</div>
-                <h1>Hi, I'm George.</h1>
-                <p>I started GTC Development with one goal: help local businesses get the same kind of modern, high-performing website that big companies pay a fortune for — without the agency price tag or the runaround.</p>
+                <h2>Hi, I'm George.</h2>
+                <p>I started GTC Web Studio with one goal: help local businesses get the same kind of modern, high-performing website that big companies pay a fortune for — without the agency price tag or the runaround.</p>
                 <p>When you work with me, you work with me — not a sales team, not a junior designer. I learn your business, build your site, and stick around to keep it growing. I'm just starting GTC, which means every client gets my full focus — and the care that comes from someone building their reputation one great site at a time.</p>
                 <div class="about-actions">
                     <button class="btn btn-grad" data-nav="contact">Work with me</button>
                     <button class="btn btn-ghost" data-nav="work">See my work →</button>
                 </div>
             </div>
-            <img class="about-photo" src="assets/george.jpg" alt="George Clarke, founder of GTC Development" width="460" height="460" loading="lazy">
+            <img class="about-photo" src="assets/george.jpg" alt="George Clarke, founder of GTC Web Studio" width="460" height="460" loading="lazy">
         </div>
         <div class="band">
             <div class="stats">
@@ -344,7 +463,7 @@
         <div class="contact-grid">
             <div class="contact-info">
                 <div class="eyebrow">GET A FREE MOCKUP</div>
-                <h1>Let's get your business online.</h1>
+                <h2>Let's get your business online.</h2>
                 <p>Tell me a little about your business and I'll put together a free mockup of your new website — no cost, no commitment. You'll usually hear back within a day.</p>
                 <div class="contact-methods">
                     <a class="contact-method" href="mailto:clarkegeorge0509@gmail.com">
@@ -378,7 +497,7 @@
     <footer class="footer">
         <div class="footer-grid">
             <div>
-                <div class="footer-brand"><span class="brand-mark">G</span> GTC Development</div>
+                <div class="footer-brand"><span class="brand-mark">G</span> GTC Web Studio</div>
                 <p class="footer-blurb">Fast, modern websites that bring local businesses more customers. Built by George.</p>
             </div>
             <div>
@@ -399,7 +518,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <span>© 2026 GTC Development</span>
+            <span>© 2026 GTC Web Studio</span>
             <span>Built with care by George</span>
         </div>
     </footer>

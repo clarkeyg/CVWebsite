@@ -1,5 +1,5 @@
 /* ============================================================================
-   GTC Development — site behaviour
+   GTC Web Studio — site behaviour
    A small single-page site: six "screens" toggled client-side, driven by the
    URL hash so links are shareable and the browser back button works. No
    framework, no build step — to match the rest of this codebase.
