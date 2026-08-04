@@ -34,6 +34,7 @@ No build step, no frontend framework. Open the templates and edit.
 ├── analytics.py                 # Cookieless first-party analytics + /stats
 ├── gtc.py                       # GTC Web Studio site serving + contact-form backend
 ├── seo.py                       # /robots.txt + /sitemap.xml, generated per request
+├── assets.py                    # Version-stamped CSS/JS URLs so deploys beat the cache
 ├── requirements.txt             # Pinned Python dependencies
 ├── .env.example                 # Documented environment variables
 ├── templates/

@@ -4,6 +4,7 @@ import os
 import secrets
 
 import analytics
+import assets
 import gtc
 import seo
 
@@ -17,6 +18,11 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 # Set SECRET_KEY in the host environment for sessions that survive restarts;
 # otherwise fall back to a random per-process key so no real secret is committed.
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
+
+# Version-stamped CSS/JS URLs, so a deploy is picked up immediately instead of
+# waiting out a cached copy. Registered first: it adds the asset() template
+# global the pages below render with. See assets.py.
+assets.init_app(app)
 
 # Cookieless first-party analytics: records page views and serves a public
 # /stats dashboard (aggregate counts only). See analytics.py.

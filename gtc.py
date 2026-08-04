@@ -32,6 +32,7 @@ from email.message import EmailMessage
 
 from flask import Response, current_app, jsonify, request, send_from_directory
 
+import assets
 import seo
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -161,10 +162,10 @@ def _index():
     """
     with open(os.path.join(GTC_DIR, "index.html"), encoding="utf-8") as fh:
         html = fh.read()
-    return Response(
-        html.replace("%SITE_BASE_URL%", seo.base_url()),
-        mimetype="text/html",
-    )
+    html = html.replace("%SITE_BASE_URL%", seo.base_url())
+    # Stamp site.css/site.js with their mtimes so a deploy is not held up behind
+    # a visitor's cached copy. See assets.py.
+    return Response(assets.resolve(html, "gtc"), mimetype="text/html")
 
 
 def _static(filename):
