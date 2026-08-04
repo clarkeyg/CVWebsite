@@ -338,6 +338,36 @@ img { display: block; max-width: 100%; }
   .hero-cta { width: 100%; }
 }
 
+/* ---- Scroll performance on small screens -------------------------------
+   Phone GPUs re-rasterise large blurs and full-screen blends on every frame
+   of a scroll, which is what makes the hero judder. These effects are all
+   decorative, so drop the expensive ones below the desktop breakpoint and
+   keep the layout identical. Matches the 900px gate in the JS parallax.
+   ------------------------------------------------------------------------ */
+@media (max-width: 900px) {
+  /* A full-viewport fixed layer with mix-blend-mode forces the whole page to
+     be re-composited every frame. At 5% opacity it is barely visible anyway. */
+  .noise { display: none; }
+
+  /* blur(90px) over a hero-sized box, with three infinite keyframe animations
+     underneath it, cannot be cached — it re-blurs continuously. Halve the
+     radius and hold the shapes still so the layer rasterises once. */
+  .aurora { filter: blur(45px); }
+  .aurora .a1, .aurora .a2, .aurora .a3 { animation: none; }
+  .contact-aurora { filter: blur(55px); }
+
+  /* backdrop-filter on a fixed element samples the moving page behind it on
+     every frame. An opaque bar looks the same against this palette. */
+  .nav.scrolled {
+    background: rgba(7,7,17,.94);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+  }
+  .pill, .btn-ghost { backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+  /* No JS parallax runs at this width, so don't pay for the promoted layers. */
+  .hero-content, .aurora { will-change: auto; }
+}
+
 /* ---- Reduced motion ----------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -32,7 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 
     const colors = ['34,211,238', '139,92,246', '244,114,182'];
-    const LINES = 22;
+    // Phones redraw this on the same thread that services scrolling, so thin the
+    // per-frame path work out on small screens.
+    const small = window.innerWidth < 900;
+    const LINES = small ? 12 : 22;
+    const STEP = small ? 22 : 14;
     const draw = (t) => {
       ctx.clearRect(0, 0, W, H);
       for (let i = 0; i < LINES; i++) {
@@ -41,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const col = colors[i % 3];
         const amp = 16 + 16 * Math.sin(i * 0.7);
         ctx.beginPath();
-        for (let x = 0; x <= W + 14; x += 14) {
+        for (let x = 0; x <= W + STEP; x += STEP) {
           const k = x / W;
           let y = baseY
             + Math.sin(k * 5 + t * 1.1 + i * 0.45) * amp
@@ -61,9 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (reduce) { draw(0.6); return; }
-    let t = 0;
+
+    // Only animate while the hero is on screen and the tab is visible. Left
+    // running, this burns a frame's worth of main-thread work all the way down
+    // the page and starves the scroll handler.
+    let t = 0, running = false, visible = true, onScreen = true;
     const tick = () => { t += 0.006; draw(t); raf = requestAnimationFrame(tick); };
-    raf = requestAnimationFrame(tick);
+    const sync = () => {
+      const want = visible && onScreen;
+      if (want && !running) { running = true; raf = requestAnimationFrame(tick); }
+      else if (!want && running) { running = false; cancelAnimationFrame(raf); }
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(cv);
+    }
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; sync(); });
+    sync();
   })();
 
   /* ---- Scroll reveals ---------------------------------------------- */
@@ -127,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pinSection = $('[data-pin-section]');
   const track = $('[data-track]');
   const pinProgress = $('[data-pin-progress]');
-  let pinDist = 0, pinOn = false;
+  let pinDist = 0, pinOn = false, pinTop = 0, pinRange = 0;
 
   const setupPin = () => {
     if (!pinSection || !track) return;
@@ -140,24 +157,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pinOn) {
       pinDist = Math.max(0, track.scrollWidth - window.innerWidth + 80);
       pinSection.style.height = (window.innerHeight + pinDist * 1.05) + 'px';
+      // Cache the geometry so the scroll handler never has to force a layout.
+      pinTop = pinSection.getBoundingClientRect().top + (window.scrollY || 0);
+      pinRange = pinSection.offsetHeight - window.innerHeight;
     }
   };
-  const updatePin = () => {
-    if (!pinOn) return;
-    const total = pinSection.offsetHeight - window.innerHeight;
-    const p = Math.min(Math.max(-pinSection.getBoundingClientRect().top / total, 0), 1);
-    track.style.transform = `translateX(${-pinDist * p}px)`;
+  const updatePin = (y) => {
+    if (!pinOn || pinRange <= 0) return;
+    const p = Math.min(Math.max((y - pinTop) / pinRange, 0), 1);
+    track.style.transform = `translate3d(${-pinDist * p}px,0,0)`;
     if (pinProgress) {
       const cards = track.children.length;
       pinProgress.textContent = pad(Math.min(cards, Math.floor(p * cards) + 1)) + ' / ' + pad(cards);
     }
   };
-  setupPin();
-  window.addEventListener('resize', setupPin);
 
   /* ---- Hero parallax ----------------------------------------------- */
   const hero = $('[data-herocontent]');
   const aurora = $('[data-aurora]');
+  // Desktop only. On touch devices the scroll position reaches the main thread
+  // a frame or more behind the compositor, so moving the hero text from a
+  // scroll handler makes it judder against the rest of the page.
+  const fine = !window.matchMedia || window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  let canParallax = false, heroMoved = false;
 
   /* ---- Mobile nav burger -------------------------------------------- */
   (function initBurger() {
@@ -183,31 +205,72 @@ document.addEventListener('DOMContentLoaded', () => {
   const sections = navLinks.map(a => $(a.getAttribute('href'))).filter(Boolean);
 
   let ticking = false;
-  const onScroll = () => {
-    const y = window.scrollY || 0;
-    const h = document.documentElement.scrollHeight - window.innerHeight;
+  let docRange = 0, secTops = [], vh = window.innerHeight;
 
-    if (progress) progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+  // Everything that reads layout happens here, never in the scroll handler —
+  // interleaving reads with the style writes below forces a synchronous reflow
+  // on every single frame of the scroll.
+  const measure = () => {
+    setupPin();
+    vh = window.innerHeight;
+    const y = window.scrollY || 0;
+    docRange = document.documentElement.scrollHeight - vh;
+    secTops = sections.map(s => s.getBoundingClientRect().top + y);
+
+    canParallax = !reduce && fine && window.innerWidth >= 900;
+    if (!canParallax) {
+      // Unconditional: past the hero the handler parks it at opacity 0, so a
+      // resize down to mobile there would otherwise strand the name invisible.
+      if (hero) { hero.style.transform = ''; hero.style.opacity = ''; }
+      if (aurora) aurora.style.transform = '';
+      heroMoved = false;
+    }
+  };
+
+  const onScroll = () => {
+    ticking = false;
+    const y = window.scrollY || 0;
+
+    if (progress) progress.style.width = (docRange > 0 ? (y / docRange) * 100 : 0) + '%';
     if (nav) nav.classList.toggle('scrolled', y > 30);
 
-    if (!reduce && y < window.innerHeight * 1.2) {
-      if (hero) {
-        hero.style.transform = `translateY(${y * 0.26}px)`;
-        hero.style.opacity = String(Math.max(0, 1 - y / (window.innerHeight * 0.78)));
+    if (canParallax) {
+      if (y < vh * 1.2) {
+        if (hero) {
+          hero.style.transform = `translate3d(0,${y * 0.26}px,0)`;
+          hero.style.opacity = String(Math.max(0, 1 - y / (vh * 0.78)));
+        }
+        if (aurora) aurora.style.transform = `translate3d(0,${y * 0.12}px,0)`;
+        heroMoved = true;
+      } else if (heroMoved) {
+        // Past the hero — park it rather than leaving a stale transform behind.
+        if (hero) hero.style.opacity = '0';
+        heroMoved = false;
       }
-      if (aurora) aurora.style.transform = `translateY(${y * 0.12}px)`;
     }
 
-    updatePin();
+    updatePin(y);
 
     let cur = '';
-    for (const s of sections) { if (s.getBoundingClientRect().top <= 120) cur = '#' + s.id; }
+    for (let i = 0; i < secTops.length; i++) { if (secTops[i] - y <= 120) cur = '#' + sections[i].id; }
     navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === cur));
-
-    ticking = false;
   };
+
   window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
   }, { passive: true });
+
+  // Mobile browsers fire a resize storm as the URL bar collapses during scroll.
+  // A width change is a real layout change; a height-only change is not, so
+  // debounce it rather than re-measuring mid-scroll.
+  let lastW = window.innerWidth, rt;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth !== lastW) { lastW = window.innerWidth; measure(); onScroll(); return; }
+    clearTimeout(rt);
+    rt = setTimeout(() => { measure(); onScroll(); }, 200);
+  });
+  window.addEventListener('load', () => { measure(); onScroll(); });
+
+  measure();
   onScroll();
 });
