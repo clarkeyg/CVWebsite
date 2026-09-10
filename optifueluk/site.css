@@ -168,6 +168,11 @@ section { padding:96px 0; }
 .footer .fbrand { display:flex; align-items:center; gap:11px; margin-bottom:14px; }
 .footer .fbrand img { width:34px; height:34px; border-radius:9px; }
 .footer .fbrand span { font-family:var(--font-display); color:#fff; font-weight:700; font-size:19px; }
+/* Cross-link to the GTC Web Studio site at /GTC/. Underlined, because every
+   other string in this footer is already a link and colour alone would not
+   distinguish it. */
+.footer .fcross { max-width:320px; line-height:1.5; margin:16px 0 0; color:rgba(255,255,255,.55); }
+.footer .fcross a { color:#fff; text-decoration:underline; text-underline-offset:3px; }
 .footer-bottom { border-top:.5px solid rgba(255,255,255,.14); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:rgba(255,255,255,.5); }
 
 @media (max-width:860px){

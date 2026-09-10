@@ -453,6 +453,11 @@ h2.h-sec { margin:0; font-size:clamp(30px,5vw,42px); letter-spacing:-.02em; font
 .footer-brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:800; font-size:18px; }
 .footer-brand .brand-mark { width:28px; height:28px; border-radius:7px; font-size:14px; }
 .footer-blurb { margin:16px 0 0; color:var(--text-2); font-size:15px; line-height:1.6; max-width:320px; }
+/* Cross-link to the OptiFuelUK site at /OptiFuelUK/. Underlined so it reads as
+   a link next to the blurb it sits under. */
+.footer-cross { margin:14px 0 0; color:var(--text-2); font-size:14px; line-height:1.6; max-width:320px; }
+.footer-cross a { color:var(--text); text-decoration:underline; text-underline-offset:3px; }
+.footer-cross a:hover { color:var(--teal-300); }
 .footer-col-label { font:700 12px/1 var(--mono); color:var(--muted); letter-spacing:.05em; margin-bottom:18px; }
 .footer-col-links { display:flex; flex-direction:column; gap:12px; font-size:15px; color:var(--text-3); }
 /* Long, unbreakable tokens like the email address must wrap rather than spill
