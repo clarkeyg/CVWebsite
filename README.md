@@ -97,6 +97,7 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | Method | Path                       | Description                          |
 | ------ | -------------------------- | ------------------------------------ |
 | GET    | `/`                        | CV / portfolio page                  |
+| GET    | `/favicon.ico`             | Site icon (legacy location; real set in `static/icons/`) |
 | GET    | `/OptiFuelUK/`             | OptiFuelUK landing page              |
 | GET    | `/OptiFuelUK/<path>`       | OptiFuelUK pages & assets            |
 | GET    | `/GTC/`                    | GTC Web Studio landing page          |

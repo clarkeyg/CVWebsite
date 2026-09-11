@@ -60,6 +60,13 @@ def canonical_section_case():
     return redirect(target, code=301)
 
 
+@app.route('/favicon.ico')
+def favicon():
+    """Legacy favicon location; browsers and Google fall back to it when no
+    <link rel=icon> is found. The real icons live in static/icons/."""
+    return send_from_directory(os.path.join(app.static_folder, 'icons'), 'favicon.ico')
+
+
 @app.route('/')
 def index():
     """Main portfolio page. All content lives in templates/index.html."""

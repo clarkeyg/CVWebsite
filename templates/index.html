@@ -38,7 +38,12 @@
     }
     </script>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2322D3EE'/><text x='50' y='70' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23070711' text-anchor='middle'>G</text></svg>">
+    <!-- Real files, not a data: URI, so Google can fetch the icon for search results. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="{{ url_for('static', filename='icons/favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ url_for('static', filename='icons/favicon-96.png') }}" type="image/png" sizes="96x96">
+    <link rel="icon" href="{{ url_for('static', filename='icons/favicon-192.png') }}" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
