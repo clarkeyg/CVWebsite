@@ -1,6 +1,7 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
+import re
 import secrets
 
 import analytics
@@ -34,6 +35,29 @@ gtc.init_app(app)
 
 # /robots.txt and /sitemap.xml, generated from the request host. See seo.py.
 seo.init_app(app)
+
+# The section prefixes are mixed-case but people type them in lowercase, and
+# Flask routing is case-sensitive, so /gtc or /optifueluk would 404. Any casing
+# of a prefix (as a whole path segment, so /gtcfoo is left alone) 301s to the
+# canonical path, keeping the subpath and query string.
+SECTION_PREFIXES = ('/GTC', '/OptiFuelUK')
+_SECTION_RE = re.compile(
+    '^(' + '|'.join(re.escape(p) for p in SECTION_PREFIXES) + ')(?=/|$)', re.IGNORECASE
+)
+
+
+@app.before_request
+def canonical_section_case():
+    """Redirect /gtc, /Gtc/site.css, /optifueluk?x=y etc. to their canonical casing."""
+    m = _SECTION_RE.match(request.path)
+    if not m or m.group(1) in SECTION_PREFIXES:
+        return None
+    prefix = next(p for p in SECTION_PREFIXES if p.lower() == m.group(1).lower())
+    # Bare prefix goes straight to the trailing-slash form, not via a 2nd redirect.
+    target = prefix + (request.path[m.end():] or '/')
+    if request.query_string:
+        target += '?' + request.query_string.decode('latin-1')
+    return redirect(target, code=301)
 
 
 @app.route('/')

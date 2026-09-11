@@ -103,6 +103,7 @@ environment, so `.env` is **not** auto-loaded). See [`.env.example`](.env.exampl
 | GET    | `/GTC/demo/cafe/`          | "Maple Street" café demo (example build) |
 | GET    | `/GTC/<path>`              | GTC Web Studio assets (site.css/js) & demo assets |
 | POST   | `/GTC/contact`             | GTC contact-form submission (form-encoded) |
+| GET    | `/gtc`, `/optifueluk`, … | Any casing of a section prefix → 301 to the canonical path |
 | GET    | `/robots.txt`              | Crawl rules + sitemap pointer        |
 | GET    | `/sitemap.xml`             | Sitemap of the public pages          |
 | GET    | `/stats`                   | Analytics dashboard (public)         |
